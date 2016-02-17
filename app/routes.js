@@ -1,6 +1,6 @@
 // app/routes.js
-var pg       = require('pg');
-var database = require('../config/db');
+var pg = require('pg');
+var db = require('../config/db');
 
     module.exports = function(app) {
 
@@ -9,8 +9,8 @@ var database = require('../config/db');
         // authentication routes
 
         var results = [];
-        app.get('/WILLIAMGROSSEBITCH', function(req, res) {
-            pg.connect(database.connect, function (err, client, done) {
+        app.get('/account', function(req, res) {
+            pg.connect(db.url, function (err, client, done) {
                 if (err) {
                     done();
                     console.err(err);
@@ -20,8 +20,8 @@ var database = require('../config/db');
                 var query = client.query("SELECT * FROM items");
                 query.on('row', function (row) {
                     results.push(row);
-                });
-
+		});
+		
                 query.on('end', function () {
                     done();
                     return res.status(200).json(results);
