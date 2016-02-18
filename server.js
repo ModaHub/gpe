@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override')); 
 
 // routes ==================================================
-require('./app/routes')(app); // configure our routes
+require('./app/routes')(app);
 
 // start app ===============================================
 app.listen(port);

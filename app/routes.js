@@ -1,31 +1,24 @@
 // app/routes.js
-var pg = require('pg');
-var db = require('../config/db');
 
-    module.exports = function(app) {
+//HOME
+var user = require ('routes/home/dashboard.js')
+var user = require ('routes/home/checklist.js')
 
-        // server routes ===========================================================
-        // handle things like api calls
-        // authentication routes
+//ADMINISTRATION
+var user = require ('routes/administration/identity/user.js')
+var user = require ('routes/administration/identity/group.js')
+var user = require ('routes/administration/maintenance/maintenance.js')
+var user = require ('routes/administration/right/right.js')
+var user = require ('routes/administration/right/resource.js')
 
-        var results = [];
-        app.get('/account', function(req, res) {
-            pg.connect(db.url, function (err, client, done) {
-                if (err) {
-                    done();
-                    console.err(err);
-                    return res.status(500).json('Database connection failed bitch !');
-                }
+//MODULES
+var user = require ('routes/modules/authentication.js')
 
-                var query = client.query("SELECT * FROM items");
-                query.on('row', function (row) {
-                    results.push(row);
-		});
-		
-                query.on('end', function () {
-                    done();
-                    return res.status(200).json(results);
-                });
-            });
-        });
-    };
+//SERVICES
+var user = require ('routes/services/application.js')
+var user = require ('routes/services/compute.js')
+var user = require ('routes/services/database.js')
+var user = require ('routes/services/network.js')
+var user = require ('routes/services/security.js')
+var user = require ('routes/services/storage.js')
+var user = require ('routes/services/system.js')

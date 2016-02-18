@@ -1,3 +1,5 @@
+// app/models/initdb.js
+
 var pg = require('pg');
 var db = require('../../config/db');
 
