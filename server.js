@@ -13,10 +13,8 @@ var objectFlatten   = require('./app/utils/objectFlatten');
 if (!process.env.APPLICATION_ENV) {
     process.env.APPLICATION_ENV = 'development';
 }
-var db             = require('./config/' + process.env.APPLICATION_ENV);
-process.env.db_url = db.url;
-
-var port = process.env.npm_package_config_port || 8080;
+var config         = require('./config/' + process.env.APPLICATION_ENV);
+process.env.db_url = config.db_url;
 
 // expose app
 exports = module.exports = app;
@@ -41,7 +39,7 @@ for (var route in routes) {
 }
 
 // start app ===============================================
-app.listen(port);
+app.listen(config.port);
 
 // shoutout
 console.log('Magic happens on port ' + port);
