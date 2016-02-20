@@ -31,8 +31,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 for (var dir in routes) {
     for (var subdir in routes[dir]) {
         for (var file in routes[dir][subdir]) {
-            if (Object.keys(routes[dir][subdir][file]).length > 0) {
-                console.log(routes[dir][subdir][file]);
+            if (routes[dir][subdir][file].length > 0) {
                 app.use('/', routes[dir][subdir][file]);
             }
         }
