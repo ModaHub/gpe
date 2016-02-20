@@ -5,7 +5,7 @@
 //var user = require ('./routes/home/checklist')
 
 //ADMINISTRATION
-var user = require ('./routes/administration/identity/user')
+// var user = require ('./routes/administration/identity/user')
 //var user = require ('./routes/administration/identity/group')
 //var user = require ('./routes/administration/maintenance/maintenance')
 //var user = require ('./routes/administration/right/right')

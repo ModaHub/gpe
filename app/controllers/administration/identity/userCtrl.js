@@ -12,9 +12,8 @@ module.exports = function(app) {
     app.get('/users', function(req, res) {
 	pg.connect(db.url, function (err, client, done) {
 	    if (err) {
-		done();
-		console.err(err);
-		return res.status(500).json('Database connection failed bitch !');
+		  console.err(err);
+		  return res.status(500).json('Database connection failed bitch !');
 	    }
 
 	    var query = client.query("SELECT * FROM users");
@@ -23,7 +22,6 @@ module.exports = function(app) {
 	    });
 
 	    query.on('end', function () {
-		done();
 		return res.status(200).json(results);
 	    });
 	});
