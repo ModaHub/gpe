@@ -1,10 +1,9 @@
 // app/controllers/administration/identity/userCtrl.js
 var pg = require('pg');
-var db = require('../../../../config/db');
 
 module.exports.getUsers = function (req, res) {
     var results = [];
-    pg.connect(db.url, function (err, client, done) {
+    pg.connect(process.env.db_url, function (err, client, done) {
         if (err) {
          console.error(err);
          return res.status(500).json('Database connection failed bitch !');
