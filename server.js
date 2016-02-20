@@ -7,6 +7,7 @@ var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 var requireDir      = require('require-dir');
 var routes          = requireDir('./app/routes', {recurse: true});
+var objectFlatten   = require('./app/utils/objectFlatten');
 
 // configuration ===========================================
 var port = process.env.npm_package_config_port || 8080;
@@ -28,15 +29,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // routes ==================================================
-for (var dir in routes) {
-    for (var subdir in routes[dir]) {
-        for (var file in routes[dir][subdir]) {
-            if (routes[dir][subdir][file].length > 0) {
-                app.use('/', routes[dir][subdir][file]);
-            }
-        }
-    }
+routes = objectFlatten(routes);
+for (var route in routes) {
+    app.use('/', routes[route]);
 }
+
 // start app ===============================================
 app.listen(port);
 
