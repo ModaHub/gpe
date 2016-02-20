@@ -10,7 +10,9 @@ var routes          = requireDir('./app/routes', {recurse: true});
 var objectFlatten   = require('./app/utils/objectFlatten');
 
 // configuration ===========================================
-var port = process.env.npm_package_config_port || 8080;
+var db = require('./config/db');
+process.env.db_url = db.url;
+var port           = process.env.npm_package_config_port || 8080;
 
 // expose app
 exports = module.exports = app;
