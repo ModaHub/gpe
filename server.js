@@ -31,7 +31,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // routes ==================================================
 routes = objectFlatten(routes);
 for (var route in routes) {
-    app.use('/', routes[route]);
+    require('./app/routes/' + route)(app);
 }
 
 // start app ===============================================

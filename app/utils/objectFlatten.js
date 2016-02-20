@@ -11,7 +11,7 @@ var objectFlatten = function (obj) {
                 if (!flattened.hasOwnProperty(flat_sub_obj)) {
                     continue;
                 }
-                ret[flat_sub_obj] = flattened[flat_sub_obj];
+                ret[sub_obj + '/' + flat_sub_obj] = flattened[flat_sub_obj];
             }
         } else {
             ret[sub_obj] = obj[sub_obj];
