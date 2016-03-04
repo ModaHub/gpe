@@ -42,4 +42,4 @@ for (var route in routes) {
 app.listen(config.port);
 
 // shoutout
-console.log('Magic happens on port ' + port);
+console.log('Magic happens on port ' + config.port);
