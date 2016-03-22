@@ -2,5 +2,5 @@
 var user = require ('../../../controllers/administration/identity/userCtrl.js')
 
 module.exports = function (app) {
-    app.get('/users', user.getUsers);
+    app.get('/administration/users', user.getUsers);
 };

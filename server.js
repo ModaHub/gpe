@@ -6,13 +6,13 @@ var app             = express();
 var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 var requireDir      = require('require-dir');
-var routes          = requireDir('./app/routes', {recurse: true});
 var objectFlatten   = require('./app/utils/objectFlatten');
+var routes          = requireDir('./app/routes', {recurse: true});
+var models	    = require('./app/models')
 
 // configuration ===========================================
-var db = require('./config/db');
-process.env.db_url = db.url;
-var port           = process.env.npm_package_config_port || 8080;
+var config	= require('./config/config');
+var port	= config.port;
 
 // expose app
 exports = module.exports = app;
@@ -37,7 +37,8 @@ for (var route in routes) {
 }
 
 // start app ===============================================
-app.listen(port);
+models.sequelize.sync().then(function() {
+    app.listen(port);
+});
 
-// shoutout
-console.log('Magic happens on port ' + port);
+console.log('Server listening on port ' + port);
