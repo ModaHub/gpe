@@ -11,8 +11,14 @@ var routes          = requireDir('./app/routes', {recurse: true});
 var models	    = require('./app/models')
 
 // configuration ===========================================
+
 var config	= require('./config/config');
 var port	= config.port;
+
+if (!process.env.APPLICATION_ENV) {
+    process.env.APPLICATION_ENV = 'development';
+}
+var config         = require('./config/' + process.env.APPLICATION_ENV);
 
 // expose app
 exports = module.exports = app;
@@ -41,4 +47,5 @@ models.sequelize.sync().then(function() {
     app.listen(port);
 });
 
-console.log('Server listening on port ' + port);
+// shoutout
+console.log('Magic happens on port ' + config.port);
