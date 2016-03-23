@@ -1,27 +1,27 @@
 // app/controllers/services/storage/getStorageCtrl.js
-var models = require ('../../../models')
+var db = require ('../../../models')
 
-module.exports.getAllStorageContainers = function (req, res) {
-    var query = models.sequelize.query("SELECT * FROM storage_containers", { type: models.sequelize.QueryTypes.SELECT});
+module.exports.Containers = function (req, res) {
+    var query = db.sequelize.query("SELECT * FROM storage_containers", { type: db.sequelize.QueryTypes.SELECT});
     var results = query.then(function (value) {
 	res.status(200).send(value);
     })
 };
 
-module.exports.getAllStorageObjects = function (req, res) {
-    var query = models.sequelize.query("SELECT * FROM storage_objects", { type: models.sequelize.QueryTypes.SELECT});
+module.exports.Objects = function (req, res) {
+    var query = db.sequelize.query("SELECT * FROM storage_objects", { type: db.sequelize.QueryTypes.SELECT});
     var results = query.then(function (value) {
 	res.status(200).send(value);
     })
 };
 
-module.exports.getAWSStorageContainers = function (req, res) {
+module.exports.AWSContainers = function (req, res) {
     if (!req.params.id)
     {
-	var query = models.aws_storage_containers.findAll({});
+	var query = db.aws_storage_containers.findAll({});
     } else {
-	var query = models.aws_storage_containers.findAll({
-	    where: { 'id': req.params.id}
+	var query = db.aws_storage_containers.findAll({
+	    where: { 'id': req.params.id }
 	});
     }
     var results = query.then(function (value) {
@@ -29,13 +29,13 @@ module.exports.getAWSStorageContainers = function (req, res) {
     })
 };
 
-module.exports.getAZRStorageContainers = function (req, res) {
+module.exports.AWSContainersById = function (req, res) {
     if (!req.params.id)
     {
-	var query = models.azr_storage_containers.findAll({});
+	var query = db.aws_storage_containers.findAll({});
     } else {
-	var query = models.azr_storage_containers.findAll({
-	    where: { 'id': req.params.id}
+	var query = db.aws_storage_objects.findAll({
+	    where: { 'container_id': req.params.id }
 	});
     }
     var results = query.then(function (value) {
@@ -43,14 +43,13 @@ module.exports.getAZRStorageContainers = function (req, res) {
     })
 };
 
-
-module.exports.getAWSStorageObjects = function (req, res) {
+module.exports.AZRContainers = function (req, res) {
     if (!req.params.id)
     {
-	var query = models.aws_storage_objects.findAll({});
+	var query = db.azr_storage_containers.findAll({});
     } else {
-	var query = models.aws_storage_objects.findAll({
-	    where: { 'id': req.params.id}
+	var query = db.azr_storage_containers.findAll({
+	    where: { 'id': req.params.id }
 	});
     }
     var results = query.then(function (value) {
@@ -58,13 +57,41 @@ module.exports.getAWSStorageObjects = function (req, res) {
     })
 };
 
-module.exports.getAZRStorageObjects = function (req, res) {
+module.exports.AZRContainersById = function (req, res) {
     if (!req.params.id)
     {
-	var query = models.azr_storage_objects.findAll({});
+	var query = db.azr_storage_containers.findAll({});
     } else {
-	var query = models.azr_storage_objects.findAll({
-	    where: { 'id': req.params.id}
+	var query = db.azr_storage_objects.findAll({
+	    where: { 'container_id': req.params.id }
+	});
+    }
+    var results = query.then(function (value) {
+	res.status(200).send(value);
+    })
+};
+
+module.exports.AWSObjects = function (req, res) {
+    if (!req.params.id)
+    {
+	var query = db.aws_storage_objects.findAll({});
+    } else {
+	var query = db.aws_storage_objects.findAll({
+	    where: { 'id': req.params.id }
+	});
+    }
+    var results = query.then(function (value) {
+	res.status(200).send(value);
+    })
+};
+
+module.exports.AZRObjects = function (req, res) {
+    if (!req.params.id)
+    {
+	var query = db.azr_storage_objects.findAll({});
+    } else {
+	var query = db.azr_storage_objects.findAll({
+	    where: { 'id': req.params.id }
 	});
     }
     var results = query.then(function (value) {
