@@ -2,31 +2,36 @@
 var getStorage = require ('../../../controllers/services/storage/getStorageCtrl.js')
 var putStorage = require ('../../../controllers/services/storage/putStorageCtrl.js')
 
-//GET
 module.exports = function (app) {
     /**GET**/
     //All Storage Containers
-    app.get('/storage/all/containers/', getStorage.getAllStorageContainers);
+    app.get('/storage/containers/', getStorage.Containers);
     //All Storage Objects
-    app.get('/storage/all/objects/', getStorage.getAllStorageObjects);
+    app.get('/storage/objects/', getStorage.Objects);
+    
     //AWS Storage Containers
-    app.get('/storage/aws/containers', getStorage.getAWSStorageContainers);
-    app.get('/storage/aws/containers/:id', getStorage.getAWSStorageContainers);
-    app.get('/storage/aws/objects', getStorage.getAWSStorageObjects);
-    app.get('/storage/aws/objects/:id', getStorage.getAWSStorageObjects);
+    app.get('/storage/aws/containers', getStorage.AWSContainers);
+    app.get('/storage/aws/containers/:id', getStorage.AWSContainers);
+    //AWS Storage Objects
+    app.get('/storage/aws/containers/:id/objects', getStorage.AWSContainersById);
+    app.get('/storage/aws/objects', getStorage.AWSObjects);
+    app.get('/storage/aws/objects/:id', getStorage.AWSObjects);
+    
+    //AZR Storage Containerss
+    app.get('/storage/azr/containers', getStorage.AZRContainers);
+    app.get('/storage/azr/containers/:id', getStorage.AZRContainers);
     //AZR Storage Objects
-    app.get('/storage/azr/containers', getStorage.getAZRStorageContainers);
-    app.get('/storage/azr/containers/:id', getStorage.getAZRStorageContainers);
-    app.get('/storage/azr/objects', getStorage.getAZRStorageObjects);
-    app.get('/storage/azr/objects/:id', getStorage.getAZRStorageObjects);
+    app.get('/storage/azr/containers/:id/objects', getStorage.AZRContainersById);
+    app.get('/storage/azr/objects', getStorage.AZRObjects);
+    app.get('/storage/azr/objects/:id', getStorage.AZRObjects);
 
     /**PUT**/
     //AWS Storage Containers
-    app.put('/storage/aws/containers', putStorage.putAWSStorageContainers);
-    app.put('/storage/aws/objects', putStorage.putAWSStorageObjects);
+    app.put('/storage/aws/containers', putStorage.AWSContainers);
+    app.put('/storage/aws/containers/:id/objects', putStorage.AWSObjects);
     //AZR Storage Objects
-    app.put('/storage/azr/containers', putStorage.putAZRStorageContainers);
-    app.put('/storage/azr/objects', putStorage.putAZRStorageObjects);
+    app.put('/storage/azr/containers', putStorage.AZRContainers);
+    app.put('/storage/azr/containers/:id/objects', putStorage.AZRObjects);
 
 };
 
