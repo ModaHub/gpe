@@ -8,7 +8,7 @@ var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../../config/database')[env];
 var db        = {};
 
-var sequelize = new Sequelize(config.dburl, { define : { timestamps : false }});
+var sequelize = new Sequelize(config.url, { define : { timestamps: false, logging: true }});
 
 fs
   .readdirSync(__dirname)

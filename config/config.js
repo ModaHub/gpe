@@ -1,5 +1,7 @@
 // config/config.js
 
 module.exports = {
-    port: "8080",
+    hostname: "37.59.60.163",
+    ip: "37.59.60.163",
+    port: "8080"
 }

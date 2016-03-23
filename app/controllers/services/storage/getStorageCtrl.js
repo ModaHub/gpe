@@ -1,5 +1,4 @@
 // app/controllers/services/storage/getStorageCtrl.js
-var pg = require('pg')
 var models = require ('../../../models')
 
 module.exports.getAllStorageContainers = function (req, res) {
