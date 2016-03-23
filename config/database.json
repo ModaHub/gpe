@@ -1,11 +1,11 @@
 {
     "development": {
-	"dburl": "postgresql://root:etna42@127.0.0.1:5432/gpe"
+	"url": "postgresql://root:etna42@127.0.0.1:5432/gpe"
     },
     "test": {
-	"dburl": "postgresql://root:etna42@127.0.0.1:5432/gpe"
+	"url": "postgresql://root:etna42@127.0.0.1:5432/gpe"
     },
     "production": {
-	"dburl": "postgresql://root:etna42@127.0.0.1:5432/gpe"
+	"url": "postgresql://root:etna42@127.0.0.1:5432/gpe"
     }
 }

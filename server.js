@@ -1,24 +1,18 @@
 // server.js
 
 // modules =================================================
-var express         = require('express');
-var app             = express();
-var bodyParser      = require('body-parser');
-var methodOverride  = require('method-override');
-var requireDir      = require('require-dir');
-var objectFlatten   = require('./app/utils/objectFlatten');
-var routes          = requireDir('./app/routes', {recurse: true});
-var models	    = require('./app/models')
+var express		= require('express');
+var app			= express();
+var bodyParser		= require('body-parser');
+var methodOverride	= require('method-override');
+var requireDir		= require('require-dir');
+var objectFlatten	= require('./app/utils/objectFlatten');
+var routes		= requireDir('./app/routes', {recurse: true});
+var db			= require('./app/models')
 
 // configuration ===========================================
 
-var config	= require('./config/config');
-var port	= config.port;
-
-if (!process.env.APPLICATION_ENV) {
-    process.env.APPLICATION_ENV = 'development';
-}
-var config         = require('./config/' + process.env.APPLICATION_ENV);
+var config		= require('./config/config');
 
 // expose app
 exports = module.exports = app;
@@ -43,9 +37,8 @@ for (var route in routes) {
 }
 
 // start app ===============================================
-models.sequelize.sync().then(function() {
-    app.listen(port);
+db.sequelize.sync().then(function() {
+    var server = app.listen((config.port), function() {
+	console.log('Magic happens on ' + config.ip + ":" + config.port);
+    });
 });
-
-// shoutout
-console.log('Magic happens on port ' + config.port);
