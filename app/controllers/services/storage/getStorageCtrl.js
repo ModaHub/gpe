@@ -16,12 +16,14 @@ module.exports.Objects = function (req, res) {
 };
 
 module.exports.AWSContainers = function (req, res) {
-    if (!req.params.id)
+    if (!req.params.container_id)
     {
 	var query = db.aws_storage_containers.findAll({});
     } else {
 	var query = db.aws_storage_containers.findAll({
-	    where: { 'id': req.params.id }
+	    where: {
+		id: req.params.container_id
+	    }
 	});
     }
     var results = query.then(function (value) {
@@ -30,12 +32,14 @@ module.exports.AWSContainers = function (req, res) {
 };
 
 module.exports.AWSContainersById = function (req, res) {
-    if (!req.params.id)
+    if (!req.params.container_id)
     {
 	var query = db.aws_storage_containers.findAll({});
     } else {
 	var query = db.aws_storage_objects.findAll({
-	    where: { 'container_id': req.params.id }
+	    where: {
+		container_id: req.params.container_id
+	    }
 	});
     }
     var results = query.then(function (value) {
@@ -44,12 +48,14 @@ module.exports.AWSContainersById = function (req, res) {
 };
 
 module.exports.AZRContainers = function (req, res) {
-    if (!req.params.id)
+    if (!req.params.container_id)
     {
 	var query = db.azr_storage_containers.findAll({});
     } else {
 	var query = db.azr_storage_containers.findAll({
-	    where: { 'id': req.params.id }
+	    where: {
+		id: req.params.container_id
+	    }
 	});
     }
     var results = query.then(function (value) {
@@ -58,12 +64,12 @@ module.exports.AZRContainers = function (req, res) {
 };
 
 module.exports.AZRContainersById = function (req, res) {
-    if (!req.params.id)
+    if (!req.params.container_id)
     {
 	var query = db.azr_storage_containers.findAll({});
     } else {
 	var query = db.azr_storage_objects.findAll({
-	    where: { 'container_id': req.params.id }
+	    where: { container_id: req.params.container_id }
 	});
     }
     var results = query.then(function (value) {
@@ -72,12 +78,14 @@ module.exports.AZRContainersById = function (req, res) {
 };
 
 module.exports.AWSObjects = function (req, res) {
-    if (!req.params.id)
+    if (!req.params.object_id)
     {
 	var query = db.aws_storage_objects.findAll({});
     } else {
 	var query = db.aws_storage_objects.findAll({
-	    where: { 'id': req.params.id }
+	    where: {
+		id: req.params.object_id
+	    }
 	});
     }
     var results = query.then(function (value) {
@@ -86,12 +94,14 @@ module.exports.AWSObjects = function (req, res) {
 };
 
 module.exports.AZRObjects = function (req, res) {
-    if (!req.params.id)
+    if (!req.params.object_id)
     {
 	var query = db.azr_storage_objects.findAll({});
     } else {
 	var query = db.azr_storage_objects.findAll({
-	    where: { 'id': req.params.id }
+	    where: {
+		id: req.params.object_id
+	    }
 	});
     }
     var results = query.then(function (value) {
