@@ -1,8 +1,8 @@
-// app/controllers/services/storage/putStorageCtrl.js
+// app/controllers/services/storage/updateStorageCtrl.js
 var db = require ('../../../models')
 
 module.exports.AWSContainers = function (req, res) {
-    var query = db.aws_storage_containers.create(
+    var query = db.aws_storage_containers.update(
 	{
 	    name: req.body.name,
 	    description: req.body.description,	
@@ -14,6 +14,10 @@ module.exports.AWSContainers = function (req, res) {
 	    cache_encoding: req.body.cache_encoding,
 	    expect: req.body.expect,
 	    cors_configuration: req.body.cors_configuration
+	}, {
+	    where: {
+		id: req.params.container_id
+	    }
 	}
     );
     var results = query.then(function (container) {
@@ -22,7 +26,7 @@ module.exports.AWSContainers = function (req, res) {
 };
 
 module.exports.AZRContainers = function (req, res) {
-    var query = db.azr_storage_containers.create(
+    var query = db.azr_storage_containers.update(
 	{
 	    name: req.body.name,
 	    description: req.body.description,
@@ -32,6 +36,10 @@ module.exports.AZRContainers = function (req, res) {
 	    expect: req.body.expect,
 	    cors_configuration: req.body.cors_configuration,
 	    metadata: req.body.metadata
+	}, {
+	    where: {
+		id: req.params.container_id
+	    }
 	}
     );
     var results = query.then(function (container) {
@@ -40,7 +48,7 @@ module.exports.AZRContainers = function (req, res) {
 };
 
 module.exports.AWSObjects = function (req, res) {
-    var query = db.aws_storage_objects.create(
+    var query = db.aws_storage_objects.update(
 	{
 	    name: req.body.name,
 	    description: req.body.description,
@@ -51,7 +59,11 @@ module.exports.AWSObjects = function (req, res) {
 	    md5hash: req.body.md5hash,
 	    metadata: req.body.metadata,
 	    amz_website_redirect_location: req.body.amz_website_redirect_location,
-	    container_id: req.params.id
+	    container_id: req.params.container_id
+	}, {
+	    where: {
+		id: req.params.object_id
+	    }
 	}
     );
     var results = query.then(function (object) {
@@ -60,7 +72,7 @@ module.exports.AWSObjects = function (req, res) {
 };
 
 module.exports.AZRObjects = function (req, res) {
-    var query = db.azr_storage_objects.create(
+    var query = db.azr_storage_objects.update(
 	{
 	    name: req.body.name,
 	    description: req.body.description,
@@ -73,7 +85,11 @@ module.exports.AZRObjects = function (req, res) {
 	    cache_disposition: req.body.cache_disposition,
 	    lease_id: req.body.lease_id,
 	    lease_duration: req.body.lease_duration,
-	    container_id: req.params.id
+	    container_id: req.params.container_id
+	}, {
+	    where: {
+		id: req.params.object_id
+	    }
 	}
     );
     var results = query.then(function (object) {
