@@ -11,7 +11,6 @@ var routes		= requireDir('./app/routes', {recurse: true});
 var db			= require('./app/models')
 
 // configuration ===========================================
-
 var config		= require('./config/config');
 
 // expose app
