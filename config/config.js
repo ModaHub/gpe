@@ -1,7 +1,7 @@
 // config/config.js
 
 module.exports = {
-    hostname: "37.59.60.163",
-    ip: "37.59.60.163",
+    hostname: "localhost",
+    ip: "127.0.0.1",
     port: "8080"
 }
