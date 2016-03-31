@@ -38,6 +38,6 @@ for (var route in routes) {
 // start app ===============================================
 db.sequelize.sync().then(function() {
     var server = app.listen((config.port), function() {
-	console.log('Magic happens on ' + config.ip + ":" + config.port);
+	console.log(config.hostname + ': Magic happens on ' + config.ip + ":" + config.port);
     });
 });
