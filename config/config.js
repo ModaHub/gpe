@@ -1,7 +1,8 @@
 // config/config.js
+var os = require('os');
 
 module.exports = {
-    hostname: "localhost",
-    ip: "127.0.0.1",
+    hostname: os.hostname(),
+    ip: (os.networkInterfaces()).eno1[0].address,
     port: "8080"
 }
