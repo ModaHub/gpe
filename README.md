@@ -51,8 +51,12 @@ _____________________
 ##How it works ?
 
 >|-->[CBW = Heap]---------------->[All: Containers]----------->[All: Objects]
+
 >	 |-->[CBW: AWS Storage]->[AWS: Containers {Buckets}]->[AWS: Objects {Objects}]
+
 >	 |-->[CBW: AZR Storage]->[AZR: Containers {BLOBS}]--->[AZR: Objects {BLOBS}]
 
+
 >|-->[CBW: AWS Storage]-->[AWS: Containers {Buckets}]->[AWS: Objects {Objects}]
+
 >|-->[CBW: AZR Storage]-->[AZR: Containers {BLOBS}]--->[AZR: Objects {BLOBS}]
