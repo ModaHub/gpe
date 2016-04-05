@@ -1,4 +1,4 @@
-// app/controllers/administration/identity/groupCtrl.js
+// app/controllers/administration/authentication/groupCtrl.js
 var pg = require('pg');
 
 module.exports.getGroups = function (req, res) {
