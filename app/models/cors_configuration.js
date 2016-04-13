@@ -1,50 +1,42 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('aws_cloud_accounts', {
+	return sequelize.define('cors_configuration', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		login: {
+		allowed_headers: {
+			type: DataTypes.TEXT,
+			allowNull: true
+		},
+		allowed_methods: {
 			type: DataTypes.TEXT,
 			allowNull: false
 		},
-		password: {
+		allowed_origins: {
 			type: DataTypes.TEXT,
 			allowNull: false
 		},
-		type: {
+		expose_headers: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: true
 		},
-		aws_access_key_id: {
-			type: DataTypes.TEXT,
-			allowNull: false
+		max_age_seconds: {
+			type: DataTypes.INTEGER,
+			allowNull: true
 		},
-		aws_secret_access_key_id: {
-			type: DataTypes.TEXT,
-			allowNull: false
-		},
-		aws_account_id: {
-			type: DataTypes.TEXT,
-			allowNull: false
-		},
-		aws_canonical_user_id: {
-			type: DataTypes.TEXT,
-			allowNull: false
-		},
-		user_id: {
+		item_id: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			references: {
-				model: 'users',
+				model: 'azr_storage_containers',
 				key: 'id'
 			}
 		}
 	}, {
-		tableName: 'aws_cloud_accounts'
+		tableName: 'cors_configuration'
 	});
 };

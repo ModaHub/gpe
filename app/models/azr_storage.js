@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('groups', {
+	return sequelize.define('azr_storage', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -10,17 +10,22 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		name: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: false,
+			primaryKey: true
 		},
 		description: {
 			type: DataTypes.TEXT,
 			allowNull: true
 		},
-		type: {
-			type: DataTypes.TEXT,
-			allowNull: false
+		azr_storage_account_id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			references: {
+				model: 'azr_storage_accounts',
+				key: 'id'
+			}
 		}
 	}, {
-		tableName: 'groups'
+		tableName: 'azr_storage'
 	});
 };
