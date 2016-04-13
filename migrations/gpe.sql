@@ -45,18 +45,19 @@ CREATE TABLE public.aws_storage_objects(
 	id serial NOT NULL,
 	name text NOT NULL,
 	description text,
-	storage_class text NOT NULL,
+	storage_class public.aws_storage_class_type NOT NULL,
 	type text NOT NULL,
 	size bigint NOT NULL,
 	language text,
 	md5hash text NOT NULL,
 	metadata json,
 	amz_website_redirect_location text,
-	bucket_id integer NOT NULL,
+	container_id integer NOT NULL,
 	object_level integer NOT NULL,
 	object_position int4range NOT NULL,
 	CONSTRAINT aws_storage_object_id PRIMARY KEY (id),
-	CONSTRAINT aws_storage_object_position_unique UNIQUE (object_position)
+	CONSTRAINT aws_storage_object_position_unique UNIQUE (object_position),
+	CONSTRAINT aws_storage_object_name_unique UNIQUE (name)
 
 );
 -- ddl-end --
@@ -64,9 +65,9 @@ ALTER TABLE public.aws_storage_objects OWNER TO root;
 -- ddl-end --
 
 -- Appended SQL commands --
-INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,bucket_id,object_level,object_position) VALUES ('Folder1','Folder Parent','STANDARD','folder','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','0','[0, 5]');
-INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,bucket_id,object_level,object_position) VALUES ('Folder2','Folder Fils','STANDARD','folder','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','1','[1, 4]');
-INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,bucket_id,object_level,object_position) VALUES ('Fichier1','Mon premier fichier','STANDARD','jpg','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','2','[2, 3]');
+INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,container_id,object_level,object_position) VALUES ('Folder1','Folder Parent','STANDARD','folder','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','0','[0, 5]');
+INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,container_id,object_level,object_position) VALUES ('Folder2','Folder Fils','STANDARD','folder','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','1','[1, 4]');
+INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,container_id,object_level,object_position) VALUES ('Fichier1','Mon premier fichier','STANDARD','jpg','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','2','[2, 3]');
 -- ddl-end --
 
 -- object: public.users | type: TABLE --
@@ -108,13 +109,14 @@ CREATE TABLE public.azr_storage_containers(
 	id serial NOT NULL,
 	name text NOT NULL,
 	description text,
-	cache_control text NOT NULL,
-	cache_disposition text NOT NULL,
-	cache_encoding text NOT NULL,
+	cache_control text,
+	cache_disposition text,
+	cache_encoding text,
 	expect boolean NOT NULL,
 	metadata text,
 	storage_id integer NOT NULL,
-	CONSTRAINT azr_container_id PRIMARY KEY (id)
+	CONSTRAINT azr_container_id PRIMARY KEY (id),
+	CONSTRAINT azr_storage_container_name_unique UNIQUE (name)
 
 );
 -- ddl-end --
@@ -125,9 +127,9 @@ ALTER TABLE public.azr_storage_containers OWNER TO root;
 INSERT INTO public.azr_storage_containers (name,description,cache_control,cache_disposition,cache_encoding,expect,metadata,storage_id) VALUES ('lel','lel','lel','lel','lel','0','lel','1');
 -- ddl-end --
 
--- object: public.azr_storage_blob | type: TABLE --
--- DROP TABLE IF EXISTS public.azr_storage_blob CASCADE;
-CREATE TABLE public.azr_storage_blob(
+-- object: public.azr_storage_objects | type: TABLE --
+-- DROP TABLE IF EXISTS public.azr_storage_objects CASCADE;
+CREATE TABLE public.azr_storage_objects(
 	id serial NOT NULL,
 	name text NOT NULL,
 	description text,
@@ -141,14 +143,15 @@ CREATE TABLE public.azr_storage_blob(
 	lease_id text,
 	lease_duration integer,
 	container_id integer NOT NULL,
-	blob_level integer NOT NULL,
-	blob_position int4range NOT NULL,
+	object_level integer NOT NULL,
+	object_position int4range NOT NULL,
 	CONSTRAINT azr_blob_id PRIMARY KEY (id),
-	CONSTRAINT azr_storage_blob_position_unique UNIQUE (blob_position)
+	CONSTRAINT azr_storage_blob_position_unique UNIQUE (object_position),
+	CONSTRAINT azr_storage_object_name_unique UNIQUE (name)
 
 );
 -- ddl-end --
-ALTER TABLE public.azr_storage_blob OWNER TO root;
+ALTER TABLE public.azr_storage_objects OWNER TO root;
 -- ddl-end --
 
 -- object: public.azr_storage_account_type | type: TYPE --
@@ -365,7 +368,8 @@ CREATE TABLE public.aws_storage(
 	name text NOT NULL,
 	description text,
 	aws_cloud_account_id integer NOT NULL,
-	CONSTRAINT aws_storage_id PRIMARY KEY (id)
+	CONSTRAINT aws_storage_id PRIMARY KEY (id),
+	CONSTRAINT aws_storage_name_unique UNIQUE (name)
 
 );
 -- ddl-end --
@@ -385,7 +389,8 @@ CREATE TABLE public.azr_storage(
 	name text NOT NULL,
 	description text,
 	azr_storage_account_id integer NOT NULL,
-	CONSTRAINT azr_storage_id PRIMARY KEY (id)
+	CONSTRAINT azr_storage_id PRIMARY KEY (id),
+	CONSTRAINT azr_storage_name_unique UNIQUE (name)
 
 );
 -- ddl-end --
@@ -456,9 +461,9 @@ CREATE TYPE public.aws_storage_acl_type AS
 ALTER TYPE public.aws_storage_acl_type OWNER TO root;
 -- ddl-end --
 
--- object: public.aws_storage_buckets | type: TABLE --
--- DROP TABLE IF EXISTS public.aws_storage_buckets CASCADE;
-CREATE TABLE public.aws_storage_buckets(
+-- object: public.aws_storage_containers | type: TABLE --
+-- DROP TABLE IF EXISTS public.aws_storage_containers CASCADE;
+CREATE TABLE public.aws_storage_containers(
 	id serial NOT NULL,
 	name text NOT NULL,
 	description text,
@@ -480,19 +485,20 @@ CREATE TABLE public.aws_storage_buckets(
 	xregion_replication json,
 	tagging_configuration json,
 	storage_id integer NOT NULL,
-	CONSTRAINT bucket_id PRIMARY KEY (id)
+	CONSTRAINT container_id PRIMARY KEY (id),
+	CONSTRAINT aws_storage_container_name_unique UNIQUE (name)
 
 );
 -- ddl-end --
-ALTER TABLE public.aws_storage_buckets OWNER TO root;
+ALTER TABLE public.aws_storage_containers OWNER TO root;
 -- ddl-end --
 
 -- Appended SQL commands --
-INSERT INTO public.aws_storage_buckets (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
 VALUES ('monBucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
-INSERT INTO public.aws_storage_buckets (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
 VALUES ('mon2Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
-INSERT INTO public.aws_storage_buckets (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
 VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
 -- ddl-end --
 
@@ -590,10 +596,10 @@ CREATE TRIGGER shift_object_position_on_delete
 	EXECUTE PROCEDURE public.aws_storage_objects_delete();
 -- ddl-end --
 
--- object: aws_storage_bucket_id | type: CONSTRAINT --
--- ALTER TABLE public.aws_storage_objects DROP CONSTRAINT IF EXISTS aws_storage_bucket_id CASCADE;
-ALTER TABLE public.aws_storage_objects ADD CONSTRAINT aws_storage_bucket_id FOREIGN KEY (bucket_id)
-REFERENCES public.aws_storage_buckets (id) MATCH FULL
+-- object: aws_storage_container_id | type: CONSTRAINT --
+-- ALTER TABLE public.aws_storage_objects DROP CONSTRAINT IF EXISTS aws_storage_container_id CASCADE;
+ALTER TABLE public.aws_storage_objects ADD CONSTRAINT aws_storage_container_id FOREIGN KEY (container_id)
+REFERENCES public.aws_storage_containers (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
@@ -601,14 +607,14 @@ ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ALTER TABLE public.azr_storage_containers DROP CONSTRAINT IF EXISTS azr_storage_id CASCADE;
 ALTER TABLE public.azr_storage_containers ADD CONSTRAINT azr_storage_id FOREIGN KEY (storage_id)
 REFERENCES public.azr_storage (id) MATCH FULL
-ON DELETE NO ACTION ON UPDATE NO ACTION;
+ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: azr_container_id | type: CONSTRAINT --
--- ALTER TABLE public.azr_storage_blob DROP CONSTRAINT IF EXISTS azr_container_id CASCADE;
-ALTER TABLE public.azr_storage_blob ADD CONSTRAINT azr_container_id FOREIGN KEY (container_id)
+-- ALTER TABLE public.azr_storage_objects DROP CONSTRAINT IF EXISTS azr_container_id CASCADE;
+ALTER TABLE public.azr_storage_objects ADD CONSTRAINT azr_container_id FOREIGN KEY (container_id)
 REFERENCES public.azr_storage_containers (id) MATCH FULL
-ON DELETE NO ACTION ON UPDATE NO ACTION;
+ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: user_id | type: CONSTRAINT --
@@ -689,8 +695,8 @@ ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: aws_storage_id | type: CONSTRAINT --
--- ALTER TABLE public.aws_storage_buckets DROP CONSTRAINT IF EXISTS aws_storage_id CASCADE;
-ALTER TABLE public.aws_storage_buckets ADD CONSTRAINT aws_storage_id FOREIGN KEY (storage_id)
+-- ALTER TABLE public.aws_storage_containers DROP CONSTRAINT IF EXISTS aws_storage_id CASCADE;
+ALTER TABLE public.aws_storage_containers ADD CONSTRAINT aws_storage_id FOREIGN KEY (storage_id)
 REFERENCES public.aws_storage (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
@@ -698,7 +704,7 @@ ON DELETE CASCADE ON UPDATE NO ACTION;
 -- object: cors_configuration_bucket_id | type: CONSTRAINT --
 -- ALTER TABLE public.cors_configuration DROP CONSTRAINT IF EXISTS cors_configuration_bucket_id CASCADE;
 ALTER TABLE public.cors_configuration ADD CONSTRAINT cors_configuration_bucket_id FOREIGN KEY (item_id)
-REFERENCES public.aws_storage_buckets (id) MATCH FULL
+REFERENCES public.aws_storage_containers (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
@@ -709,10 +715,10 @@ REFERENCES public.azr_storage_containers (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
--- object: aws_permission_configuration_bucket_id | type: CONSTRAINT --
--- ALTER TABLE public.aws_permission_configuration DROP CONSTRAINT IF EXISTS aws_permission_configuration_bucket_id CASCADE;
-ALTER TABLE public.aws_permission_configuration ADD CONSTRAINT aws_permission_configuration_bucket_id FOREIGN KEY (item_id)
-REFERENCES public.aws_storage_buckets (id) MATCH FULL
+-- object: aws_permission_configuration_container_id | type: CONSTRAINT --
+-- ALTER TABLE public.aws_permission_configuration DROP CONSTRAINT IF EXISTS aws_permission_configuration_container_id CASCADE;
+ALTER TABLE public.aws_permission_configuration ADD CONSTRAINT aws_permission_configuration_container_id FOREIGN KEY (item_id)
+REFERENCES public.aws_storage_containers (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 

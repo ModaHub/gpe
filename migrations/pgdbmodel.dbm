@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.2-beta" author="bouren_n" last-position="40,0" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.2-beta" author="bouren_n" last-position="0,540" last-zoom="1"
 	 default-schema="public" default-owner="root">
 <role name="root"
       superuser="true"
@@ -42,10 +42,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="aws_storage_objects">
 	<schema name="public"/>
 	<role name="root"/>
-	<appended-sql><![CDATA[INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,bucket_id,object_level,object_position) VALUES ('Folder1','Folder Parent','STANDARD','folder','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','0','[0, 5]');
-INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,bucket_id,object_level,object_position) VALUES ('Folder2','Folder Fils','STANDARD','folder','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','1','[1, 4]');
-INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,bucket_id,object_level,object_position) VALUES ('Fichier1','Mon premier fichier','STANDARD','jpg','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','2','[2, 3]');]]></appended-sql>
-	<position x="32" y="887"/>
+	<appended-sql><![CDATA[INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,container_id,object_level,object_position) VALUES ('Folder1','Folder Parent','STANDARD','folder','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','0','[0, 5]');
+INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,container_id,object_level,object_position) VALUES ('Folder2','Folder Fils','STANDARD','folder','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','1','[1, 4]');
+INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size,language,md5hash,metadata,amz_website_redirect_location,container_id,object_level,object_position) VALUES ('Fichier1','Mon premier fichier','STANDARD','jpg','0','fr_FR','5sd6f1f654dfsg4f65sd15sdf1g5sfd41','{"some": "bullshit"}','','1','2','[2, 3]');]]></appended-sql>
+	<position x="33" y="888"/>
 	<column name="id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -56,7 +56,7 @@ INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size
 		<type name="text"/>
 	</column>
 	<column name="storage_class" not-null="true">
-		<type name="text"/>
+		<type name="public.aws_storage_class_type"/>
 	</column>
 	<column name="type" not-null="true">
 		<type name="text"/>
@@ -76,7 +76,7 @@ INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size
 	<column name="amz_website_redirect_location">
 		<type name="text"/>
 	</column>
-	<column name="bucket_id" not-null="true">
+	<column name="container_id" not-null="true">
 		<type name="integer"/>
 	</column>
 	<column name="object_level" not-null="true">
@@ -90,6 +90,9 @@ INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size
 	</constraint>
 	<constraint name="aws_storage_object_position_unique" type="uq-constr" table="public.aws_storage_objects">
 		<columns names="object_position" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="aws_storage_object_name_unique" type="uq-constr" table="public.aws_storage_objects">
+		<columns names="name" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -153,13 +156,13 @@ INSERT INTO public.users (login,password,description,fname,lname,email) VALUES (
 	<column name="description">
 		<type name="text"/>
 	</column>
-	<column name="cache_control" not-null="true">
+	<column name="cache_control">
 		<type name="text"/>
 	</column>
-	<column name="cache_disposition" not-null="true">
+	<column name="cache_disposition">
 		<type name="text"/>
 	</column>
-	<column name="cache_encoding" not-null="true">
+	<column name="cache_encoding">
 		<type name="text"/>
 	</column>
 	<column name="expect" not-null="true">
@@ -174,9 +177,12 @@ INSERT INTO public.users (login,password,description,fname,lname,email) VALUES (
 	<constraint name="azr_container_id" type="pk-constr" table="public.azr_storage_containers">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+	<constraint name="azr_storage_container_name_unique" type="uq-constr" table="public.azr_storage_containers">
+		<columns names="name" ref-type="src-columns"/>
+	</constraint>
 </table>
 
-<table name="azr_storage_blob">
+<table name="azr_storage_objects">
 	<schema name="public"/>
 	<role name="root"/>
 	<position x="1902" y="891"/>
@@ -219,17 +225,20 @@ INSERT INTO public.users (login,password,description,fname,lname,email) VALUES (
 	<column name="container_id" not-null="true">
 		<type name="integer"/>
 	</column>
-	<column name="blob_level" not-null="true">
+	<column name="object_level" not-null="true">
 		<type name="integer"/>
 	</column>
-	<column name="blob_position" not-null="true">
+	<column name="object_position" not-null="true">
 		<type name="int4range"/>
 	</column>
-	<constraint name="azr_blob_id" type="pk-constr" table="public.azr_storage_blob">
+	<constraint name="azr_blob_id" type="pk-constr" table="public.azr_storage_objects">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-	<constraint name="azr_storage_blob_position_unique" type="uq-constr" table="public.azr_storage_blob">
-		<columns names="blob_position" ref-type="src-columns"/>
+	<constraint name="azr_storage_blob_position_unique" type="uq-constr" table="public.azr_storage_objects">
+		<columns names="object_position" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="azr_storage_object_name_unique" type="uq-constr" table="public.azr_storage_objects">
+		<columns names="name" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -276,7 +285,7 @@ INSERT INTO public.azr_storage_accounts (signature,name,description,label,locati
 		<type name="boolean"/>
 	</column>
 	<column name="type" not-null="true">
-		<type name="public.azr_storage_account_type" precision="1903244021"/>
+		<type name="public.azr_storage_account_type"/>
 	</column>
 	<constraint name="storage_account_id" type="pk-constr" table="public.azr_storage_accounts">
 		<columns names="id" ref-type="src-columns"/>
@@ -518,6 +527,9 @@ INSERT INTO public.aws_storage (id,name,description,aws_cloud_account_id) VALUES
 	<constraint name="aws_storage_id" type="pk-constr" table="public.aws_storage">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+	<constraint name="aws_storage_name_unique" type="uq-constr" table="public.aws_storage">
+		<columns names="name" ref-type="src-columns"/>
+	</constraint>
 </table>
 
 <table name="azr_storage">
@@ -539,6 +551,9 @@ INSERT INTO public.aws_storage (id,name,description,aws_cloud_account_id) VALUES
 	</column>
 	<constraint name="azr_storage_id" type="pk-constr" table="public.azr_storage">
 		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="azr_storage_name_unique" type="uq-constr" table="public.azr_storage">
+		<columns names="name" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -604,16 +619,16 @@ INSERT INTO public.resources (item_id,item_type) VALUES ('13','aws_storage');]]>
 	<enumeration values="private,public-read,public-read-write,authenticated-read,aws-exec-read,bucket-owner-read,bucket-owner-full-control"/>
 </usertype>
 
-<table name="aws_storage_buckets">
+<table name="aws_storage_containers">
 	<schema name="public"/>
 	<role name="root"/>
-	<appended-sql><![CDATA[INSERT INTO public.aws_storage_buckets (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+	<appended-sql><![CDATA[INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
 VALUES ('monBucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
-INSERT INTO public.aws_storage_buckets (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
 VALUES ('mon2Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
-INSERT INTO public.aws_storage_buckets (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
 VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');]]></appended-sql>
-	<position x="503" y="766"/>
+	<position x="526" y="757"/>
 	<column name="id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -627,10 +642,10 @@ VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','
 		<type name="timestamptz"/>
 	</column>
 	<column name="acl" not-null="true">
-		<type name="public.aws_storage_acl_type" precision="1903244021"/>
+		<type name="public.aws_storage_acl_type"/>
 	</column>
 	<column name="storage_class" not-null="true">
-		<type name="public.aws_storage_class_type" precision="1903244021"/>
+		<type name="public.aws_storage_class_type"/>
 	</column>
 	<column name="region" not-null="true">
 		<type name="text"/>
@@ -677,8 +692,11 @@ VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','
 	<column name="storage_id" not-null="true">
 		<type name="integer"/>
 	</column>
-	<constraint name="bucket_id" type="pk-constr" table="public.aws_storage_buckets">
+	<constraint name="container_id" type="pk-constr" table="public.aws_storage_containers">
 		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="aws_storage_container_name_unique" type="uq-constr" table="public.aws_storage_containers">
+		<columns names="name" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -800,20 +818,20 @@ END;]]></definition>
 		<function signature="public.aws_storage_objects_delete()"/>
 </trigger>
 
-<constraint name="aws_storage_bucket_id" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.aws_storage_buckets" table="public.aws_storage_objects">
-	<columns names="bucket_id" ref-type="src-columns"/>
+<constraint name="aws_storage_container_id" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.aws_storage_containers" table="public.aws_storage_objects">
+	<columns names="container_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="azr_storage_id" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.azr_storage" table="public.azr_storage_containers">
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.azr_storage" table="public.azr_storage_containers">
 	<columns names="storage_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="azr_container_id" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.azr_storage_containers" table="public.azr_storage_blob">
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.azr_storage_containers" table="public.azr_storage_objects">
 	<columns names="container_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -885,13 +903,13 @@ END;]]></definition>
 </constraint>
 
 <constraint name="aws_storage_id" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.aws_storage" table="public.aws_storage_buckets">
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.aws_storage" table="public.aws_storage_containers">
 	<columns names="storage_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="cors_configuration_bucket_id" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.aws_storage_buckets" table="public.cors_configuration">
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.aws_storage_containers" table="public.cors_configuration">
 	<columns names="item_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -902,8 +920,8 @@ END;]]></definition>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="aws_permission_configuration_bucket_id" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.aws_storage_buckets" table="public.aws_permission_configuration">
+<constraint name="aws_permission_configuration_container_id" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.aws_storage_containers" table="public.aws_permission_configuration">
 	<columns names="item_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -920,7 +938,7 @@ END;]]></definition>
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_azr_storage_objects_azr_storage_containers" type="relfk"
-	 src-table="public.azr_storage_blob"
+	 src-table="public.azr_storage_objects"
 	 dst-table="public.azr_storage_containers"
 	 src-required="false" dst-required="false"/>
 
@@ -955,7 +973,7 @@ END;]]></definition>
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_aws_storage_containers_aws_storage" type="relfk"
-	 src-table="public.aws_storage_buckets"
+	 src-table="public.aws_storage_containers"
 	 dst-table="public.aws_storage"
 	 src-required="false" dst-required="false"/>
 
@@ -981,12 +999,12 @@ END;]]></definition>
 
 <relationship name="rel_aws_storage_objects_aws_storage_containers" type="relfk"
 	 src-table="public.aws_storage_objects"
-	 dst-table="public.aws_storage_buckets"
+	 dst-table="public.aws_storage_containers"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_aws_acl_configuration_aws_storage_buckets" type="relfk"
 	 src-table="public.aws_permission_configuration"
-	 dst-table="public.aws_storage_buckets"
+	 dst-table="public.aws_storage_containers"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_aws_acl_configuration_aws_storage_objects" type="relfk"
@@ -996,7 +1014,7 @@ END;]]></definition>
 
 <relationship name="rel_aws_cors_configuration_aws_storage_buckets" type="relfk"
 	 src-table="public.cors_configuration"
-	 dst-table="public.aws_storage_buckets"
+	 dst-table="public.aws_storage_containers"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_aws_cors_configuration_azr_storage_blob_containers" type="relfk"

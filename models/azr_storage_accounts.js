@@ -20,10 +20,6 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.TEXT,
 			allowNull: false
 		},
-		type: {
-			type: DataTypes.ENUM('Standard_LRS','Standard_ZRS','Standard_GRS','Standard_RAGRS','Premium_LRS'),
-			allowNull: false
-		},
 		label: {
 			type: DataTypes.TEXT,
 			allowNull: false
@@ -46,6 +42,10 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		secondaryread: {
 			type: DataTypes.BOOLEAN,
+			allowNull: false
+		},
+		type: {
+			type: DataTypes.ENUM('Standard_LRS','Standard_ZRS','Standard_GRS','Standard_RAGRS','Premium_LRS'),
 			allowNull: false
 		}
 	}, {

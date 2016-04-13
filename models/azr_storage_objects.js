@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('azr_storage_blob', {
+	return sequelize.define('azr_storage_objects', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -10,7 +10,8 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		name: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: false,
+			primaryKey: true
 		},
 		description: {
 			type: DataTypes.TEXT,
@@ -60,16 +61,16 @@ module.exports = function(sequelize, DataTypes) {
 				key: 'id'
 			}
 		},
-		blob_level: {
+		object_level: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
-		blob_position: {
+		object_position: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true
 		}
 	}, {
-		tableName: 'azr_storage_blob'
+		tableName: 'azr_storage_objects'
 	});
 };
