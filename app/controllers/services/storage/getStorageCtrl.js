@@ -16,6 +16,8 @@ module.exports.Objects = function (req, res) {
     })
 };
 **/
+
+/** AMAZON **/
 module.exports.AWSContainers = function (req, res) {
     if (!req.params.container_id)
     {
@@ -48,6 +50,23 @@ module.exports.AWSContainersById = function (req, res) {
     })
 };
 
+module.exports.AWSObjects = function (req, res) {
+    if (!req.params.object_id)
+    {
+	var query = db.aws_storage_objects.findAll({});
+    } else {
+	var query = db.aws_storage_objects.findAll({
+	    where: {
+		id: req.params.object_id
+	    }
+	});
+    }
+    var results = query.then(function (value) {
+	res.status(200).send(value);
+    })
+};
+
+/** AZURE **/
 module.exports.AZRContainers = function (req, res) {
     if (!req.params.container_id)
     {
@@ -71,22 +90,6 @@ module.exports.AZRContainersById = function (req, res) {
     } else {
 	var query = db.azr_storage_objects.findAll({
 	    where: { container_id: req.params.container_id }
-	});
-    }
-    var results = query.then(function (value) {
-	res.status(200).send(value);
-    })
-};
-
-module.exports.AWSObjects = function (req, res) {
-    if (!req.params.object_id)
-    {
-	var query = db.aws_storage_objects.findAll({});
-    } else {
-	var query = db.aws_storage_objects.findAll({
-	    where: {
-		id: req.params.object_id
-	    }
 	});
     }
     var results = query.then(function (value) {

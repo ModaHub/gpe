@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.2-beta" author="bouren_n" last-position="0,540" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.2-beta" author="bouren_n" last-position="0,347" last-zoom="1"
 	 default-schema="public" default-owner="root">
 <role name="root"
       superuser="true"
@@ -56,7 +56,7 @@ INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size
 		<type name="text"/>
 	</column>
 	<column name="storage_class" not-null="true">
-		<type name="public.aws_storage_class_type"/>
+		<type name="public.aws_storage_class_type" precision="988323635"/>
 	</column>
 	<column name="type" not-null="true">
 		<type name="text"/>
@@ -285,7 +285,7 @@ INSERT INTO public.azr_storage_accounts (signature,name,description,label,locati
 		<type name="boolean"/>
 	</column>
 	<column name="type" not-null="true">
-		<type name="public.azr_storage_account_type"/>
+		<type name="public.azr_storage_account_type" precision="988323635"/>
 	</column>
 	<constraint name="storage_account_id" type="pk-constr" table="public.azr_storage_accounts">
 		<columns names="id" ref-type="src-columns"/>
@@ -622,11 +622,11 @@ INSERT INTO public.resources (item_id,item_type) VALUES ('13','aws_storage');]]>
 <table name="aws_storage_containers">
 	<schema name="public"/>
 	<role name="root"/>
-	<appended-sql><![CDATA[INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+	<appended-sql><![CDATA[INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,lifecycle_configuration,policy_configuration,notification_configuration,logging_configuration,xregion_replication,tags,storage_id) 
 VALUES ('monBucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
-INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,lifecycle_configuration,policy_configuration,notification_configuration,logging_configuration,xregion_replication,tags,storage_id) 
 VALUES ('mon2Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
-INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,lifecycle_configuration,policy_configuration,notification_configuration,logging_configuration,xregion_replication,tags,storage_id) 
 VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');]]></appended-sql>
 	<position x="526" y="757"/>
 	<column name="id" not-null="true">
@@ -642,10 +642,10 @@ VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','
 		<type name="timestamptz"/>
 	</column>
 	<column name="acl" not-null="true">
-		<type name="public.aws_storage_acl_type"/>
+		<type name="public.aws_storage_acl_type" precision="988323635"/>
 	</column>
 	<column name="storage_class" not-null="true">
-		<type name="public.aws_storage_class_type"/>
+		<type name="public.aws_storage_class_type" precision="988323635"/>
 	</column>
 	<column name="region" not-null="true">
 		<type name="text"/>
@@ -671,22 +671,22 @@ VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','
 	<column name="versionning" not-null="true">
 		<type name="boolean"/>
 	</column>
-	<column name="policy_configuration">
-		<type name="json"/>
-	</column>
-	<column name="logging">
-		<type name="json"/>
-	</column>
 	<column name="lifecycle_configuration">
+		<type name="json"/>
+	</column>
+	<column name="policy_configuration">
 		<type name="json"/>
 	</column>
 	<column name="notification_configuration">
 		<type name="json"/>
 	</column>
+	<column name="logging_configuration">
+		<type name="json"/>
+	</column>
 	<column name="xregion_replication">
 		<type name="json"/>
 	</column>
-	<column name="tagging_configuration">
+	<column name="tags">
 		<type name="json"/>
 	</column>
 	<column name="storage_id" not-null="true">
