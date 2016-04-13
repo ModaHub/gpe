@@ -1,4 +1,4 @@
-// app/controllers/administration/identity/userCtrl.js
+// app/controllers/administration/authentication/userCtrl.js
 var pg = require('pg');
 
 module.exports.getUsers = function (req, res) {

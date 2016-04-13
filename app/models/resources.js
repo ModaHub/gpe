@@ -1,24 +1,26 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('link_groups_users', {
-		user_id: {
+	return sequelize.define('resources', {
+		id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
+		},
+		item_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
-				model: 'users',
+				model: 'aws_storage',
 				key: 'id'
 			}
 		},
-		group_id: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			references: {
-				model: 'groups',
-				key: 'id'
-			}
+		item_type: {
+			type: DataTypes.TEXT,
+			allowNull: false
 		}
 	}, {
-		tableName: 'link_groups_users'
+		tableName: 'resources'
 	});
 };
