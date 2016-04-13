@@ -6,13 +6,14 @@ var deleteStorage = require ('../../../controllers/services/storage/deleteStorag
 
 module.exports = function (app) {
     /**GET**/
-    //All Storage Containers
+    /*//All Storage Containers
     app.get('/storage/containers/', getStorage.Containers);
     app.get('/storage/containers/:container_id', getStorage.Containers);
     app.get('/storage/containers/:container_id/objects', getStorage.ContainersById);
     //All Storage Objects
     app.get('/storage/objects/', getStorage.Objects);
     app.get('/storage/objects/:object_id', getStorage.Objects);
+    */
 
     //AWS Storage Containers
     app.get('/storage/containers/aws', getStorage.AWSContainers);
@@ -21,10 +22,10 @@ module.exports = function (app) {
     //AWS Storage Objects
     app.get('/storage/objects/aws', getStorage.AWSObjects);
     app.get('/storage/objects/aws/:object_id', getStorage.AWSObjects);
-    
+
     //AZR Storage Containerss
     app.get('/storage/containers/azr', getStorage.AZRContainers);
-    app.get('/storage/containers/azr/:object_id', getStorage.AZRContainers);
+    app.get('/storage/containers/azr/:container_id', getStorage.AZRContainers);
     app.get('/storage/containers/azr/:container_id/objects', getStorage.AZRContainersById); //Container Content
     //AZR Storage Objects
     app.get('/storage/objects/azr', getStorage.AZRObjects);

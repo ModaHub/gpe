@@ -478,12 +478,12 @@ CREATE TABLE public.aws_storage_containers(
 	expect boolean NOT NULL,
 	request_payment boolean NOT NULL,
 	versionning boolean NOT NULL,
-	policy_configuration json,
-	logging json,
 	lifecycle_configuration json,
+	policy_configuration json,
 	notification_configuration json,
+	logging_configuration json,
 	xregion_replication json,
-	tagging_configuration json,
+	tags json,
 	storage_id integer NOT NULL,
 	CONSTRAINT container_id PRIMARY KEY (id),
 	CONSTRAINT aws_storage_container_name_unique UNIQUE (name)
@@ -494,11 +494,11 @@ ALTER TABLE public.aws_storage_containers OWNER TO root;
 -- ddl-end --
 
 -- Appended SQL commands --
-INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,lifecycle_configuration,policy_configuration,notification_configuration,logging_configuration,xregion_replication,tags,storage_id) 
 VALUES ('monBucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
-INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,lifecycle_configuration,policy_configuration,notification_configuration,logging_configuration,xregion_replication,tags,storage_id) 
 VALUES ('mon2Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
-INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,policy_configuration,logging,lifecycle_configuration,notification_configuration,xregion_replication,tagging_configuration,storage_id) 
+INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,lifecycle_configuration,policy_configuration,notification_configuration,logging_configuration,xregion_replication,tags,storage_id) 
 VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
 -- ddl-end --
 
