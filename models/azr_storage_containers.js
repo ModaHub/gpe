@@ -10,7 +10,8 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		name: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: false,
+			primaryKey: true
 		},
 		description: {
 			type: DataTypes.TEXT,
@@ -18,15 +19,15 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		cache_control: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: true
 		},
 		cache_disposition: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: true
 		},
 		cache_encoding: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: true
 		},
 		expect: {
 			type: DataTypes.BOOLEAN,

@@ -10,14 +10,15 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		name: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: false,
+			primaryKey: true
 		},
 		description: {
 			type: DataTypes.TEXT,
 			allowNull: true
 		},
 		storage_class: {
-			type: DataTypes.TEXT,
+			type: DataTypes.ENUM('STANDARD','STANDARD_IA','REDUCED_REDUNDANCY'),
 			allowNull: false
 		},
 		type: {
@@ -44,11 +45,11 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.TEXT,
 			allowNull: true
 		},
-		bucket_id: {
+		container_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
-				model: 'aws_storage_buckets',
+				model: 'aws_storage_containers',
 				key: 'id'
 			}
 		},

@@ -1,6 +1,7 @@
 // app/controllers/services/storage/getStorageCtrl.js
 var db = require ('../../../models')
 
+/** Avoid row queries, wait until view models are set up.
 module.exports.Containers = function (req, res) {
     var query = db.sequelize.query("SELECT * FROM storage_containers", { type: db.sequelize.QueryTypes.SELECT});
     var results = query.then(function (value) {
@@ -14,7 +15,7 @@ module.exports.Objects = function (req, res) {
 	res.status(200).send(value);
     })
 };
-
+**/
 module.exports.AWSContainers = function (req, res) {
     if (!req.params.container_id)
     {

@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('aws_storage_buckets', {
+	return sequelize.define('aws_storage_containers', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -10,7 +10,8 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		name: {
 			type: DataTypes.TEXT,
-			allowNull: false
+			allowNull: false,
+			primaryKey: true
 		},
 		description: {
 			type: DataTypes.TEXT,
@@ -93,6 +94,6 @@ module.exports = function(sequelize, DataTypes) {
 			}
 		}
 	}, {
-		tableName: 'aws_storage_buckets'
+		tableName: 'aws_storage_containers'
 	});
 };
