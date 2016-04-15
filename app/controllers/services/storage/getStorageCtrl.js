@@ -1,5 +1,5 @@
 // app/controllers/services/storage/getStorageCtrl.js
-var db = require ('../../../models')
+var db = require('../../../models')
 
 /** Avoid row queries, wait until view models are set up.
 module.exports.Containers = function (req, res) {
@@ -18,6 +18,21 @@ module.exports.Objects = function (req, res) {
 **/
 
 /** AMAZON **/
+module.exports.getContainers = function (req, res) {
+    var table   = req.cloud_provider + '_storage_containers';
+    var query   = db[table].findAll({});
+    var results = query.then(function (data, error)) {
+        if (error) {
+            return res.status(400).json(error);
+        }
+        return res.status(200).json(data);
+    }
+};
+
+module.exports.getContainer = function (req, res) {
+    return res.status(200).json(req.container);
+};
+
 module.exports.AWSContainers = function (req, res) {
     if (!req.params.container_id)
     {
