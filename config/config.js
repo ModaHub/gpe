@@ -3,6 +3,6 @@ var os = require('os');
 
 module.exports = {
     hostname: os.hostname(),
-    ip: (os.networkInterfaces()).eno1[0].address,
+    ip: 'localhost',
     port: "8080"
 }
