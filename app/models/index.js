@@ -4,11 +4,11 @@ var fs        = require('fs');
 var path      = require('path');
 var Sequelize = require('sequelize');
 var basename  = path.basename(module.filename);
-var env       = process.env.NODE_ENV || 'development';
-var config    = require(__dirname + '/../../config/database')[env];
+var env       = process.env.NODE_ENV || 'testing';
+var config    = require(__dirname + "/../../config/" + env);
 var db        = {};
 
-var sequelize = new Sequelize(config.url, { define : { timestamps: false, logging: true }});
+var sequelize = new Sequelize(config.db_url, { define : { timestamps: false, logging: true }});
 
 fs
   .readdirSync(__dirname)
