@@ -1,17 +1,18 @@
 // server.js
 
 // modules =================================================
-var express		    = require('express');
-var app			    = express();
-var bodyParser		= require('body-parser');
-var methodOverride	= require('method-override');
-var requireDir		= require('require-dir');
-var objectFlatten	= require('./app/utils/objectFlatten');
-var routes		    = requireDir('./app/routes', {recurse: true});
-var db			    = require('./app/models');
+var express         = require('express');
+var app             = express();
+var bodyParser      = require('body-parser');
+var methodOverride  = require('method-override');
+var requireDir      = require('require-dir');
+var objectFlatten   = require('./app/utils/objectFlatten');
+var routes          = requireDir('./app/routes', {recurse: true});
+var db              = require('./app/models');
 
 // configuration ===========================================
-var config		= require('./config/config');
+var env    = process.env.NODE_ENV || 'testing';
+var config = require('./config/' + env);
 
 // expose app
 exports = module.exports = app;
