@@ -1,4 +1,4 @@
-var db      = require('../../models');
+var db      = require('../../model');
 var inArray = require('../../utils/inArray');
 
 module.exports = function (app) {

@@ -1,5 +1,5 @@
 // app/controllers/services/storage/getStorageCtrl.js
-var db = require('../../../models')
+var db = require('../../../model')
 
 // ======================= GET =======================
 module.exports.getContainers = function (req, res) {
