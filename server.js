@@ -8,7 +8,7 @@ var methodOverride  = require('method-override');
 var requireDir      = require('require-dir');
 var objectFlatten   = require('./app/utils/objectFlatten');
 var routes          = requireDir('./app/routes', {recurse: true});
-var db              = require('./app/models');
+var db              = require('./app/model');
 
 // configuration ===========================================
 var env    = process.env.NODE_ENV || 'testing';

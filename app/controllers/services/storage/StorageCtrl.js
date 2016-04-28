@@ -1,5 +1,10 @@
+<<<<<<< 19b1a721075f9990c27304f2f5eacc71f0419a22
 // app/controllers/services/storage/StorageCtrl.js
 var db = require('../../../models')
+=======
+// app/controllers/services/storage/getStorageCtrl.js
+var db = require('../../../model')
+>>>>>>> début du refactor Bookshelf
 
 // ======================= GET =======================
 module.exports.getContainers = function (req, res) {
