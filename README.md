@@ -7,14 +7,12 @@ npm install
 
 #Run:
 ```
-	npm run start
+	npm start
 ```
 -----
 #Database Configuration :
 
 ##Default Database
-
-File : config/database.json
 
 ```javascript
 postgresql://root:etna42@37.59.60.163:5432/gpe
