@@ -7,12 +7,15 @@ var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 var requireDir      = require('require-dir');
 var objectFlatten   = require('./app/utils/objectFlatten');
-var routes          = requireDir('./app/routes', {recurse: true});
-var db              = require('./app/model');
+// var routes          = requireDir('./app/routes', {recurse: true});
 
-// configuration ===========================================
-var env    = process.env.NODE_ENV || 'testing';
-var config = require('./config/' + env);
+var bookshelf = require('./app/models/bookshelf');
+
+var azr_storage_containers = require('./app/models/azr_storage_containers');
+// app.set('bookshelf', bookshelf);
+// azr_storage_containers.where({'id': 1}).fetch().then(function(result){
+// 	console.log(result);
+// });
 
 // expose app
 exports = module.exports = app;
@@ -31,14 +34,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // routes ==================================================
-routes = objectFlatten(routes);
-for (var route in routes) {
-    require('./app/routes/' + route)(app);
-}
+// routes = objectFlatten(routes);
+// for (var route in routes) {
+//     require('./app/routes/' + route)(app);
+// }
 
 // start app ===============================================
-db.sequelize.sync().then(function() {
-    var server = app.listen((config.port), function() {
-        console.log(config.hostname + ': Magic happens on ' + config.ip + ":" + config.port);
-    });
-});
+// var server = app.listen((config.port), function() {
+//     console.log(config.hostname + ': Magic happens on ' + config.ip + ":" + config.port);
+// });
