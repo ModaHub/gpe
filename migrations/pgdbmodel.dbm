@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.2-beta" author="bouren_n" last-position="0,347" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.2-beta1" author="bouren_n" last-position="0,276" last-zoom="1"
 	 default-schema="public" default-owner="root">
 <role name="root"
       superuser="true"
@@ -16,7 +16,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<roles names="postgres" role-type="refer" />
 </role>
 
-<database name="gpe" encoding="UTF8">
+<database name="development" encoding="UTF8">
 	<role name="root"/>
 </database>
 
@@ -56,7 +56,7 @@ INSERT INTO public.aws_storage_objects (name,description,storage_class,type,size
 		<type name="text"/>
 	</column>
 	<column name="storage_class" not-null="true">
-		<type name="public.aws_storage_class_type" precision="988323635"/>
+		<type name="public.aws_storage_class_type"/>
 	</column>
 	<column name="type" not-null="true">
 		<type name="text"/>
@@ -185,7 +185,7 @@ INSERT INTO public.users (login,password,description,fname,lname,email) VALUES (
 <table name="azr_storage_objects">
 	<schema name="public"/>
 	<role name="root"/>
-	<position x="1902" y="891"/>
+	<position x="1397" y="958"/>
 	<column name="id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -253,7 +253,7 @@ INSERT INTO public.users (login,password,description,fname,lname,email) VALUES (
 	<role name="root"/>
 	<appended-sql><![CDATA[INSERT INTO public.azr_storage_accounts (signature,name,description,label,location,georeplication,names,values,secondaryread,type) VALUES ('cldstr1','cldstr1','cldstr1','cldstr1','Europe','1','cldstr1','cldstr1','1','Standard_LRS');
 INSERT INTO public.azr_storage_accounts (signature,name,description,label,location,georeplication,names,values,secondaryread,type) VALUES ('cldstr2','cldstr2','cldstr2','cldstr2','Europe','0','cldstr2','cldstr2','0','Standard_ZRS');]]></appended-sql>
-	<position x="1846" y="325"/>
+	<position x="1329" y="418"/>
 	<column name="id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -285,7 +285,7 @@ INSERT INTO public.azr_storage_accounts (signature,name,description,label,locati
 		<type name="boolean"/>
 	</column>
 	<column name="type" not-null="true">
-		<type name="public.azr_storage_account_type" precision="988323635"/>
+		<type name="public.azr_storage_account_type"/>
 	</column>
 	<constraint name="storage_account_id" type="pk-constr" table="public.azr_storage_accounts">
 		<columns names="id" ref-type="src-columns"/>
@@ -328,7 +328,7 @@ INSERT INTO public.azr_storage_accounts (signature,name,description,label,locati
 <view name="storage_containers" sql-disabled="true">
 	<schema name="public"/>
 	<role name="root"/>
-	<position x="2309" y="727"/>
+	<position x="2295" y="725"/>
 	<reference>
 		<expression><![CDATA[SELECT
 aws_storage_containers.id, aws_storage_containers.name, aws_storage_containers.description, aws_storage_containers.cache_control, aws_storage_containers.cache_disposition, aws_storage_containers.cache_encoding, aws_storage_containers.expect, aws_storage_containers.cors_configuration, '0' AS metadata, aws_storage_containers.amz_storage_class AS storage_type, aws_storage_containers.region, aws_storage_containers.size, 'aws' AS cloud_vendor
@@ -382,7 +382,7 @@ public.azr_storage_containers;]]></expression>
 <view name="storage_objects" sql-disabled="true">
 	<schema name="public"/>
 	<role name="root"/>
-	<position x="2309" y="848"/>
+	<position x="2299" y="849"/>
 	<reference>
 		<expression><![CDATA[SELECT
 aws_storage_objects.id, aws_storage_objects.name, aws_storage_objects.description, aws_storage_objects.amz_storage_class, aws_storage_objects.type, aws_storage_objects.size, aws_storage_objects.language, aws_storage_objects.md5hash, aws_storage_objects.metadata, aws_storage_objects.container_id, aws_storage_objects.amz_website_redirect_location, '0' AS lease_id, '0' AS lease_duration,'aws' AS cloud_vendor
@@ -488,7 +488,7 @@ INSERT INTO public.permissions (resource_id,read,write,delete,read_permission,wr
 	</constraint>
 </table>
 
-<view name="cloud_accounts" sql-disabled="true">
+<view name="cloud_accounts">
 	<schema name="public"/>
 	<role name="root"/>
 	<position x="2282" y="60"/>
@@ -557,13 +557,13 @@ INSERT INTO public.aws_storage (id,name,description,aws_cloud_account_id) VALUES
 	</constraint>
 </table>
 
-<view name="storage" sql-disabled="true">
+<view name="storage">
 	<schema name="public"/>
 	<role name="root"/>
 	<position x="2297" y="658"/>
 	<reference>
 		<expression><![CDATA[SELECT
-aws_storage.id, aws_storage.name, aws_storage.description, aws_storage.aws_storage_account_id, 'aws' AS cloud_vendor
+aws_storage.id, aws_storage.name, aws_storage.description, aws_storage.aws_cloud_account_id, 'aws' AS cloud_vendor
 FROM
 public.aws_storage
 UNION ALL
@@ -580,7 +580,7 @@ public.azr_storage;]]></expression>
 	<appended-sql><![CDATA[INSERT INTO public.resources (item_id,item_type) VALUES ('1','aws_storage');
 INSERT INTO public.resources (item_id,item_type) VALUES ('12','aws_storage');
 INSERT INTO public.resources (item_id,item_type) VALUES ('13','aws_storage');]]></appended-sql>
-	<position x="1130" y="472"/>
+	<position x="776" y="396"/>
 	<column name="id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -598,7 +598,7 @@ INSERT INTO public.resources (item_id,item_type) VALUES ('13','aws_storage');]]>
 <view name="storage_folders" sql-disabled="true">
 	<schema name="public"/>
 	<role name="root"/>
-	<position x="2310" y="789"/>
+	<position x="2297" y="789"/>
 	<reference>
 		<expression><![CDATA[*]]></expression>
 	</reference>
@@ -628,7 +628,7 @@ INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,st
 VALUES ('mon2Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
 INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,lifecycle_configuration,policy_configuration,notification_configuration,logging_configuration,xregion_replication,tags,storage_id) 
 VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');]]></appended-sql>
-	<position x="526" y="757"/>
+	<position x="560" y="761"/>
 	<column name="id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -642,10 +642,10 @@ VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','
 		<type name="timestamptz"/>
 	</column>
 	<column name="acl" not-null="true">
-		<type name="public.aws_storage_acl_type" precision="988323635"/>
+		<type name="public.aws_storage_acl_type"/>
 	</column>
 	<column name="storage_class" not-null="true">
-		<type name="public.aws_storage_class_type" precision="988323635"/>
+		<type name="public.aws_storage_class_type"/>
 	</column>
 	<column name="region" not-null="true">
 		<type name="text"/>
@@ -703,7 +703,7 @@ VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','
 <table name="cors_configuration">
 	<schema name="public"/>
 	<role name="root"/>
-	<position x="1107" y="798"/>
+	<position x="1099" y="657"/>
 	<column name="id" not-null="true">
 		<type name="serial"/>
 	</column>
