@@ -48,8 +48,8 @@ psql [production/development/testing] root
 Allows users to manage different cloud vendor storage service like Azure Storage and Amazon S3 uniformly.
 
 ##Basic Management
-Action        | Description           
-------------- | -----------------------
+Action                  | Description           
+----------------------- | -----------------------
 **Add/Edit/Delete** (1) | a **Storage Space**: AWS, AZR or vStorage
 **Add/Edit/Delete** (2) | a **Container**: AWS Bucket, AZR Container, vContainer
 **Add/Edit/Delete** (3) | a **Folder**: FileSystem-like
@@ -68,36 +68,36 @@ Action        | Description
 ##Advanced Management
 Managing different Cloud storage services from one vStorage Space :
 
-Action        | Description           
-------------- | -----------------------
+Action              | Description           
+------------------- | -----------------------
 **Add/Edit/Delete** | a **vCloud** with AWS Storage and AZR Storage inside as members
 **Add/Edit/Delete** | a **Container/Folder/Object** in the vCloud and propagate it
-**Move/Copy** | a **Container/Folder/Object** from one Cloud Vendor to Another
-**Template** | Permit to build a **fake environnement** that could be pushed later
-**Diff** | To Know the difference between Appliance and Distant Cloud
+**Move/Copy**       | a **Container/Folder/Object** from one Cloud Vendor to Another
+**Template**        | Permit to build a **fake environnement** that could be pushed later
+**Diff**            | To Know the difference between Appliance and Distant Cloud
 
 *Note: vStorages are only virtual objects that contains informations/parameters about the object itself (Name, Description, Cloud Vendor(s), etc.). They always master the Storage Space members*
 
 ##Expert Management
 Expert Actions that should be **carefully** executed :
 
-Action        | Description           
-------------- | -----------------------
+Action          | Description           
+--------------- | -----------------------
 **Synchronize** | **Retrieve** Distant Cloud Information **to the Appliance**
-**Push** | **Push** Appliance Information **to the Distant Cloud**
-**Convert** | Allows to convert a **full branch** from eg. Amazon S3 to Azure Storage
+**Push**        | **Push** Appliance Information **to the Distant Cloud**
+**Convert**     | Allows to convert a **full branch** from eg. Amazon S3 to Azure Storage
 
 *Massive Warning: It could cause data loss !*
 
 ##Architecture
 
 ###Four levels
-Item          | Description           
-------------- |-----------------------
+Item                 | Description           
+-------------------- |-----------------------
 1. **Storage Space** | *Virtual: Represents the storage service by Cloud Vendor*
-2. **Container** | *Physical: exists in AWS as "Bucket" and in AZR as "Container"*
-3. **Folders** | *Physical: exists on AWS as "Folder" with parameters and in AZR as "Container"*
-4. **Objects** | *Physical: exists in AWS as "Object" and in AZR as "Object BLOB"*
+2. **Container**     | *Physical: exists in AWS as "Bucket" and in AZR as "Container"*
+3. **Folders**       | *Physical: exists on AWS as "Folder" with parameters and in AZR as "Container"*
+4. **Objects**       | *Physical: exists in AWS as "Object" and in AZR as "Object BLOB"*
 
 * *Virtual Type:    Is just a Layer/Item made by Cerebrow, it permits a better management of the service.*
 * *Physical Type:    Is a materialized Item that exists on the Cloud Service.*
