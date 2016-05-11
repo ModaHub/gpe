@@ -13,14 +13,14 @@ npm run start
 
 ##Databases
 
-###Sprint End Report
+####Sprint End Report
 File : config/**production**.json
-###Devs Working Database
+####Devs Working Database
 File : config/**development**.json
-###Database Modeling
+####Database Modeling
 File : config/**testing**.json
 
-###Basic Postgres Commands
+##Basic Postgres Commands
 ####Connection
 ```
 ssh gpe@cerebrow.com / mdp: gpe42
@@ -74,12 +74,12 @@ Action        | Description
 **Add/Edit/Delete** | a **Container/Folder/Object** in the vCloud and propagate it
 **Move/Copy** | a **Container/Folder/Object** from one Cloud Vendor to Another
 **Template** | Permit to build a **fake environnement** that could be pushed later
-**Diff**: | To Know the difference between Appliance and Distant Cloud
+**Diff** | To Know the difference between Appliance and Distant Cloud
 
 *Note: vStorages are only virtual objects that contains informations/parameters about the object itself (Name, Description, Cloud Vendor(s), etc.). They always master the Storage Space members*
 
 ##Expert Management
-Expert Actions that should be carefully executed :
+Expert Actions that should be **carefully** executed :
 
 Action        | Description           
 ------------- | -----------------------
@@ -90,8 +90,6 @@ Action        | Description
 *Massive Warning: It could cause data loss !*
 
 ##Architecture
-* *Virtual Type:    Is just a Layer/Item made by Cerebrow, it permits a better management of the service.*
-* *Physical Type:    Is a materialized Item that exists on the Cloud Service.*
 
 ###Four levels
 Item          | Description           
@@ -100,6 +98,9 @@ Item          | Description
 2. **Container** | *Physical: exists in AWS as "Bucket" and in AZR as "Container"*
 3. **Folders** | *Physical: exists on AWS as "Folder" with parameters and in AZR as "Container"*
 4. **Objects** | *Physical: exists in AWS as "Object" and in AZR as "Object BLOB"*
+
+* *Virtual Type:    Is just a Layer/Item made by Cerebrow, it permits a better management of the service.*
+* *Physical Type:    Is a materialized Item that exists on the Cloud Service.*
 
 ###Storage Documentation
 * **AWS Storage**:    [How it works ?](http://docs.aws.amazon.com/AmazonS3/latest/gsg/SigningUpforS3.html)
