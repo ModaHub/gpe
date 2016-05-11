@@ -1,4 +1,4 @@
-// app/controllers/services/storage/getStorageCtrl.js
+// app/controllers/services/storage/StorageCtrl.js
 var db = require('../../../models')
 
 // ======================= GET =======================
