@@ -56,25 +56,31 @@ Action        | Description
 **Add/Edit/Delete** (4) | an **Object**: AWS Object, AZR Blob, vObject
 
 *(1) Note: Deleting a Storage Space doesn't mean that the data will be deleted, only unmanaged.*
+
 *(2) Warning: Actions take effect directly in the cloud side.*
+
 *(3) Warning: Actions take effect directly in the cloud side.*
+
 *(3) Note: It should not delete files inside, but just retrieve them to the upper folder.*
+
 *(4) Warning: Actions take effect directly in the cloud side.*
 
 ##Advanced Management
 Managing different Cloud storage services from one vStorage Space :
- Action        | Description           
- ------------- | -----------------------
- **Add/Edit/Delete** | a **vCloud** with AWS Storage and AZR Storage inside as members
- **Add/Edit/Delete** | a **Container/Folder/Object** in the vCloud and propagate it
- **Move/Copy** | a **Container/Folder/Object** from one Cloud Vendor to Another
- **Template** | Permit to build a **fake environnement** that could be pushed later
- **Diff**: | To Know the difference between Appliance and Distant Cloud
+
+Action        | Description           
+------------- | -----------------------
+**Add/Edit/Delete** | a **vCloud** with AWS Storage and AZR Storage inside as members
+**Add/Edit/Delete** | a **Container/Folder/Object** in the vCloud and propagate it
+**Move/Copy** | a **Container/Folder/Object** from one Cloud Vendor to Another
+**Template** | Permit to build a **fake environnement** that could be pushed later
+**Diff**: | To Know the difference between Appliance and Distant Cloud
 
 *Note: vStorages are only virtual objects that contains informations/parameters about the object itself (Name, Description, Cloud Vendor(s), etc.). They always master the Storage Space members*
 
 ##Expert Management
 Expert Actions that should be carefully executed :
+
 Action        | Description           
 ------------- | -----------------------
 **Synchronize** | **Retrieve** Distant Cloud Information **to the Appliance**
