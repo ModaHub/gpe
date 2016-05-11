@@ -47,47 +47,52 @@ _____________________
 Allows users to manage different cloud vendor storage service like Azure Storage and Amazon S3 uniformly.
 
 ##Basic Management
-* Add/Edit/Delete a Storage Space: AWS, AZR or vStorage
-_Note: Deleting a Storage Space doesn't mean that the data stored will be deleted in the cloud side, only unmanaged._
-* Add/Edit/Delete a Container : AWS Bucket, AZR Container, vContainer
-_Warning: Actions take effect directly in the cloud side._
-* Add/Edit/Delete a Folder : FileSystem-like
-_Warning: Actions take effect directly in the cloud side._
+* **Add/Edit/Delete** a Storage Space: AWS, AZR or vStorage
+
+*Note: Deleting a Storage Space doesn't mean that the data stored will be deleted in the cloud side, only unmanaged.*
+* **Add/Edit/Delete** a **Container** : AWS Bucket, AZR Container, vContainer
+
+*Warning: Actions take effect directly in the cloud side.*
+* **Add/Edit/Delete** a **Folder** : FileSystem-like
+
+*Warning: Actions take effect directly in the cloud side.*
+
 _Note: It should not delete files inside, but just retrieve them to the upper folder._
-* Add/Edit/Delete an Object : AWS Object, AZR Blob, vObject
-_Warning: Actions take effect directly in the cloud side._
+* **Add/Edit/Delete** an **Object** : AWS Object, AZR Blob, vObject
+
+***Warning**: Actions take effect directly in the cloud side.*
 
 ##Advanced Management
 Managing different Cloud storage services from one vStorage Space :
-* Add a vCloud with AWS Storage and AZR Storage inside as members
-* Add/Edit/Delete a Container/Folder/Object in the vCloud and propagate to a specific or both Cloud Vendors
-* Move/Copy a Container/Folder/Object from one Cloud Vendor to Another
-* Template: Permit to build a fake environnement that could be pushed later
-* Diff: To Know the difference between Appliance and Distant Cloud
+* **Add/Edit/Delete** a **vCloud** with AWS Storage and AZR Storage inside as members
+* **Add/Edit/Delete** a **Container/Folder/Object** in the vCloud and propagate to a specific or both Cloud Vendors
+* **Move/Copy** a **Container/Folder/Object** from one Cloud Vendor to Another
+* **Template**: Permit to build a **fake environnement** that could be pushed later
+* **Diff**: To Know the difference between Appliance and Distant Cloud
 
-_Note: vStorages are only virtual objects that contains informations/parameters about the object itself (Name, Description, Cloud Vendor(s), etc.). They always master the Storage Space members_
+***Note**: vStorages are only virtual objects that contains informations/parameters about the object itself (Name, Description, Cloud Vendor(s), etc.). They always master the Storage Space members*
 
 ##Expert Management
 Expert Actions that should be carefully executed :
-* Synchronize: Retrieve Distant Cloud Information to the Appliance
-* Push: Push Appliance Information to the Distant Cloud
-* Convert: Allows to convert a full branch from eg. Amazon S3 to Azure Storage.
+* **Synchronize**: **Retrieve** Distant Cloud Information **to the Appliance**
+* **Push**: **Push** Appliance Information **to the Distant Cloud**
+* **Convert**: Allows to convert a **full branch** from eg. Amazon S3 to Azure Storage.
 
-_Massive Warning: It could cause data loss !_
+***Massive Warning**: It could cause data loss !*
 
 ##Architecture
-* _Virtual Type: Is just a Layer made by Cerebrow, it permits a better view/management of the service._
-* _Physical Type: Is a materialized Container that exists on the Cloud Service._
+* ***Virtual Type**: Is just a Layer made by Cerebrow, it permits a better view/management of the service.*
+* ***Physical Type**: Is a materialized Container that exists on the Cloud Service.*
 
 ###Four levels
-1. Storage Space (Virtual: Represents the storage service by Cloud Vendor)
-2. Container (Physical: exists in AWS as "Bucket" and in AZR as "Container")
-3. Folders (Virtual: Allows the user to arrange Objects (Files) like a FileSystem does & Physical: exists on AWS as "Folder" with parameters and in AZR as "Container")
-4. Objects (Physical: exists in AWS as "Object" and in AZR as "Object BLOB")
+1. **Storage Space** (Virtual: Represents the storage service by Cloud Vendor)
+2. **Container** (Physical: exists in AWS as "Bucket" and in AZR as "Container")
+3. **Folders** (Virtual: Allows the user to arrange Objects (Files) like a FileSystem does & Physical: exists on AWS as "Folder" with parameters and in AZR as "Container")
+4. **Objects** (Physical: exists in AWS as "Object" and in AZR as "Object BLOB")
 
 ###Storage Documentation
-* AWS Storage : [How it works ?](http://docs.aws.amazon.com/AmazonS3/latest/gsg/SigningUpforS3.html)
-* Azure Storage : [How it works ?](https://azure.microsoft.com/fr-fr/documentation/articles/storage-nodejs-how-to-use-blob-storage/)
+* **AWS Storage**: [How it works ?](http://docs.aws.amazon.com/AmazonS3/latest/gsg/SigningUpforS3.html)
+* **Azure Storage**: [How it works ?](https://azure.microsoft.com/fr-fr/documentation/articles/storage-nodejs-how-to-use-blob-storage/)
 
 _____________________
 #RBAC
