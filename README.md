@@ -1,9 +1,10 @@
-#Installation
+#Get Started
+##Installation
 ```
 npm install
 ```
 
-#Run:
+##Run:
 ```
 npm run start
 ```
@@ -13,11 +14,11 @@ npm run start
 ##Databases
 
 ###Sprint End Report
-File : config/production.json
+File : config/**production**.json
 ###Devs Working Database
-File : config/development.json
+File : config/**development**.json
 ###Database Modeling
-File : config/testing.json
+File : config/**testing**.json
 
 ###Basic Postgres Commands
 Connection:
@@ -37,12 +38,12 @@ Quit:
 ##Bookshelfjs Configuration
 [Priority: 1]
 
-_____________________
+-----
 
 #Cloud Accounts
 [Priority: 1]
 
-_____________________
+-----
 #Storage Module
 Allows users to manage different cloud vendor storage service like Azure Storage and Amazon S3 uniformly.
 
@@ -57,10 +58,10 @@ Allows users to manage different cloud vendor storage service like Azure Storage
 
 *Warning: Actions take effect directly in the cloud side.*
 
-_Note: It should not delete files inside, but just retrieve them to the upper folder._
+*Note: It should not delete files inside, but just retrieve them to the upper folder.*
 * **Add/Edit/Delete** an **Object** : AWS Object, AZR Blob, vObject
 
-***Warning**: Actions take effect directly in the cloud side.*
+*Warning: Actions take effect directly in the cloud side.*
 
 ##Advanced Management
 Managing different Cloud storage services from one vStorage Space :
@@ -70,7 +71,9 @@ Managing different Cloud storage services from one vStorage Space :
 * **Template**: Permit to build a **fake environnement** that could be pushed later
 * **Diff**: To Know the difference between Appliance and Distant Cloud
 
-***Note**: vStorages are only virtual objects that contains informations/parameters about the object itself (Name, Description, Cloud Vendor(s), etc.). They always master the Storage Space members*
+*Note: vStorages are only virtual objects that contains informations/parameters about the object itself (Name, Description, Cloud Vendor(s), etc.).*
+
+*They always master the Storage Space members*
 
 ##Expert Management
 Expert Actions that should be carefully executed :
@@ -81,30 +84,30 @@ Expert Actions that should be carefully executed :
 ***Massive Warning**: It could cause data loss !*
 
 ##Architecture
-* ***Virtual Type**: Is just a Layer made by Cerebrow, it permits a better view/management of the service.*
-* ***Physical Type**: Is a materialized Container that exists on the Cloud Service.*
+* *Virtual Type: Is just a Layer made by Cerebrow, it permits a better view/management of the service.*
+* *Physical Type: Is a materialized Container that exists on the Cloud Service.*
 
 ###Four levels
-1. **Storage Space** (Virtual: Represents the storage service by Cloud Vendor)
-2. **Container** (Physical: exists in AWS as "Bucket" and in AZR as "Container")
-3. **Folders** (Virtual: Allows the user to arrange Objects (Files) like a FileSystem does & Physical: exists on AWS as "Folder" with parameters and in AZR as "Container")
-4. **Objects** (Physical: exists in AWS as "Object" and in AZR as "Object BLOB")
+1. **Storage Space** *Virtual: Represents the storage service by Cloud Vendor*
+2. **Container** *Physical: exists in AWS as "Bucket" and in AZR as "Container"*
+3. **Folders** *Physical: exists on AWS as "Folder" with parameters and in AZR as "Container"*
+4. **Objects** *Physical: exists in AWS as "Object" and in AZR as "Object BLOB"*
 
 ###Storage Documentation
 * **AWS Storage**: [How it works ?](http://docs.aws.amazon.com/AmazonS3/latest/gsg/SigningUpforS3.html)
 * **Azure Storage**: [How it works ?](https://azure.microsoft.com/fr-fr/documentation/articles/storage-nodejs-how-to-use-blob-storage/)
 
-_____________________
+-----
 #RBAC
 [Priority: 5]
 
-_____________________
+-----
 #SDK
 ##Get Started
 * [Amazon Nodejs SDK Guide](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/)
 * [Azure Nodejs SDK Guide](https://azure.microsoft.com/fr-fr/develop/nodej/)
 
 ##Documentation
-* [Amazon Nodejs SDK Doc](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/)
-* [Azure Nodejs SDK Doc](http://azure.github.io/azure-sdk-for-node/)
+* [Amazon Nodejs SDK Documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/)
+* [Azure Nodejs SDK Doccumentation](http://azure.github.io/azure-sdk-for-node/)
 
