@@ -1,10 +1,10 @@
 // aws_storage.js
 'use strict';
 
-var Bookshelf = require('./bookshelf');
+var orm = require('./orm');
 
-var aws_storage = Bookshelf.Model.extend({
+var aws_storage = orm.Model.extend({
   tableName: 'aws_storage'
 });
 
-module.exports = Bookshelf.model('aws_storage', aws_storage);
+module.exports = orm.model('aws_storage', aws_storage);

@@ -1,10 +1,10 @@
 // azr_storage.js
 'use strict';
 
-var Bookshelf = require('./bookshelf');
+var orm = require('./orm');
 
-var azr_storage = Bookshelf.Model.extend({
+var azr_storage = orm.Model.extend({
   tableName: 'azr_storage'
 });
 
-module.exports = Bookshelf.model('azr_storage', azr_storage);
+module.exports = orm.model('azr_storage', azr_storage);
