@@ -1,37 +1,53 @@
-<<<<<<< 19b1a721075f9990c27304f2f5eacc71f0419a22
 // app/controllers/services/storage/StorageCtrl.js
-var db = require('../../../models')
-=======
-// app/controllers/services/storage/getStorageCtrl.js
-var db = require('../../../model')
->>>>>>> début du refactor Bookshelf
+var storage = require("../../../models/storage");
 
 // ======================= GET =======================
-module.exports.getContainers = function (req, res) {
-    var table   = req.cloud_provider + '_storage_containers';
-    var query   = db[table].findAll({});
-    var results = query.then(function (data) {
-        return res.status(200).json(data);
-    });
-};
+module.exports.getStorages = function(req, res) {
+    storage.where({'cloud_vendor': req.cloud_provider})
+        .fetch()
+        .then(function(result){
+            return res.status(200).json(result);
+        })
+        .catch(function(error) {
+            return res.status(400).json(error);
+        });
+}
 
-module.exports.getContainer = function (req, res) {
-    return res.status(200).json(req.container);
-};
-
-module.exports.getObjectFromContainer = function (req, res) {
-    return res.status(200).json(req.storage_object);
-};
-
-module.exports.getObjects = function (req, res) {
-    var table   = req.cloud_provider + '_storage_objects';
-    var query   = db[table].findAll({});
-    var results = query.then(function (data) {
-        return res.status(200).json(data);
+module.exports.getStorage = function(req, res) {
+    storage.where({'id': req.storage_id})
+    .fetch()
+    .then(function(result){
+        if (null === result)
+            return res.status(404).json("Storage not found");
+        else
+            return res.status(200).json(result);
+    })
+    .catch(function(error) {
+        return res.status(400).json(error);
     });
 }
 
+module.exports.getContainers = function (req, res) {
+    return res.status(200).json("getContainers");
+};
+
+module.exports.getContainer = function (req, res) {
+    return res.status(200).json("getContainer");
+};
+
+module.exports.getObjectFromContainer = function (req, res) {
+    return res.status(200).json("getObjectFromContainer");
+};
+
+module.exports.getObjects = function (req, res) {
+    return res.status(200).json("getObjects");
+}
+
 // ======================= POST =======================
+module.exports.postStorage = function(req, res) {
+    return res.status(200).json("postStorage");
+}
+
 module.exports.updateContainer = function (req, res) {
     return res.status(200).json('updateContainer');
 };
@@ -42,6 +58,10 @@ module.exports.updateObject = function (req, res) {
 
 
 // ======================= PUT =======================
+module.exports.putStorage = function(req, res) {
+    return res.status(200).json("putStorage");
+}
+
 module.exports.putContainer = function (req, res) {
     return res.status(200).json('putContainer');
 };
