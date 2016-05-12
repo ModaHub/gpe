@@ -249,14 +249,14 @@ aws_storage_objects.id, aws_storage_objects.name, aws_storage_objects.descriptio
 FROM
 public.aws_storage_objects
 WHERE
-type = 'file'
+type != 'folder'
 UNION ALL
 SELECT
 azr_storage_objects.id, azr_storage_objects.name, azr_storage_objects.description, NULL AS storage_class, azr_storage_objects.azr_blob_type, azr_storage_objects.type, azr_storage_objects.size, azr_storage_objects.language, azr_storage_objects.md5hash, azr_storage_objects.metadata, NULL AS amz_website_redirect_location, azr_storage_objects.content_disposition, azr_storage_objects.lease_id, azr_storage_objects.lease_duration, azr_storage_objects.container_id, azr_storage_objects.object_level, azr_storage_objects.object_position, 'azr' AS cloud_vendor
 FROM
 public.azr_storage_objects
 WHERE
-type = 'file';
+type != 'folder';
 -- ddl-end --
 ALTER VIEW public.storage_objects OWNER TO root;
 -- ddl-end --
