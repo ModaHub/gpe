@@ -1,5 +1,5 @@
 -- Database generated with pgModeler (PostgreSQL Database Modeler).
--- pgModeler  version: 0.8.2-beta
+-- pgModeler  version: 0.8.2-beta1
 -- PostgreSQL version: 9.5
 -- Project Site: pgmodeler.com.br
 -- Model Author: bouren_n
@@ -22,9 +22,9 @@ CREATE ROLE root WITH
 
 -- Database creation must be done outside an multicommand file.
 -- These commands were put in this file only for convenience.
--- -- object: gpe | type: DATABASE --
--- -- DROP DATABASE IF EXISTS gpe;
--- CREATE DATABASE gpe
+-- -- object: development | type: DATABASE --
+-- -- DROP DATABASE IF EXISTS development;
+-- CREATE DATABASE development
 -- 	ENCODING = 'UTF8'
 -- 	OWNER = root
 -- ;
@@ -138,7 +138,7 @@ CREATE TABLE public.azr_storage_objects(
 	size bigint NOT NULL,
 	language text,
 	md5hash text NOT NULL,
-	metadata text,
+	metadata json,
 	content_disposition text NOT NULL,
 	lease_id text,
 	lease_duration integer,
@@ -208,24 +208,14 @@ ALTER TABLE public.azr_cloud_accounts OWNER TO root;
 INSERT INTO public.azr_cloud_accounts (login,password,azr_subscription_id,azr_storage_account_id,user_id) VALUES ('bouren_n@etna-alternance.net','secret42','680fe13a-97f0-4f03-858c-e61f151f100d','1','1');
 -- ddl-end --
 
--- -- object: public.storage_containers | type: VIEW --
--- -- DROP VIEW IF EXISTS public.storage_containers CASCADE;
--- CREATE VIEW public.storage_containers
--- AS 
--- 
--- SELECT
--- aws_storage_containers.id, aws_storage_containers.name, aws_storage_containers.description, aws_storage_containers.cache_control, aws_storage_containers.cache_disposition, aws_storage_containers.cache_encoding, aws_storage_containers.expect, aws_storage_containers.cors_configuration, '0' AS metadata, aws_storage_containers.amz_storage_class AS storage_type, aws_storage_containers.region, aws_storage_containers.size, 'aws' AS cloud_vendor
--- FROM
--- public.aws_storage_containers
--- UNION ALL
--- SELECT
--- azr_storage_containers.id, azr_storage_containers.name, azr_storage_containers.description, azr_storage_containers.cache_control, azr_storage_containers.cache_disposition, azr_storage_containers.cache_encoding, azr_storage_containers.expect, azr_storage_containers.cors_configuration, azr_storage_containers.metadata, '0'  AS storage_type, '0' AS azr_storage_account_region, '0' AS size,  'azr' AS cloud_vendor
--- FROM 
--- public.azr_storage_containers;
--- -- ddl-end --
--- ALTER VIEW public.storage_containers OWNER TO root;
--- -- ddl-end --
--- 
+-- object: public.aws_storage_acl_type | type: TYPE --
+-- DROP TYPE IF EXISTS public.aws_storage_acl_type CASCADE;
+CREATE TYPE public.aws_storage_acl_type AS
+ ENUM ('private','public-read','public-read-write','authenticated-read','aws-exec-read','bucket-owner-read','bucket-owner-full-control');
+-- ddl-end --
+ALTER TYPE public.aws_storage_acl_type OWNER TO root;
+-- ddl-end --
+
 -- object: public.aws_cloud_accounts | type: TABLE --
 -- DROP TABLE IF EXISTS public.aws_cloud_accounts CASCADE;
 CREATE TABLE public.aws_cloud_accounts(
@@ -249,24 +239,28 @@ ALTER TABLE public.aws_cloud_accounts OWNER TO root;
 INSERT INTO public.aws_cloud_accounts (login,password,type,aws_access_key_id,aws_secret_access_key_id,aws_account_id,aws_canonical_user_id,user_id) VALUES ('bouren_n@etna-alternance.net','etna42','root','AKIAIZL4Y6D4JDUPSM5A','RkNkRDBXZ8Midrc6ZnH3N5Iwz+6LIDKx7WEfE9XY','A5472-4984-3702','fa47085858ab564334ea42d468c62785f177627106af3bcfbc13cc2dfbe2e497','1');
 -- ddl-end --
 
--- -- object: public.storage_objects | type: VIEW --
--- -- DROP VIEW IF EXISTS public.storage_objects CASCADE;
--- CREATE VIEW public.storage_objects
--- AS 
--- 
--- SELECT
--- aws_storage_objects.id, aws_storage_objects.name, aws_storage_objects.description, aws_storage_objects.amz_storage_class, aws_storage_objects.type, aws_storage_objects.size, aws_storage_objects.language, aws_storage_objects.md5hash, aws_storage_objects.metadata, aws_storage_objects.container_id, aws_storage_objects.amz_website_redirect_location, '0' AS lease_id, '0' AS lease_duration,'aws' AS cloud_vendor
--- FROM 
--- public.aws_storage_objects
--- UNION ALL
--- SELECT
--- azr_storage_objects.id, azr_storage_objects.name, azr_storage_objects.description, azr_storage_objects.azr_blob_type, azr_storage_objects.type, azr_storage_objects.size, azr_storage_objects.language, azr_storage_objects.md5hash, azr_storage_objects.metadata, azr_storage_objects.container_id,'0' AS amz_website_redirect_location, azr_storage_objects.lease_id, azr_storage_objects.lease_duration,'azr' AS cloud_vendor
--- FROM
--- public.azr_storage_objects;
--- -- ddl-end --
--- ALTER VIEW public.storage_objects OWNER TO root;
--- -- ddl-end --
--- 
+-- object: public.storage_objects | type: VIEW --
+-- DROP VIEW IF EXISTS public.storage_objects CASCADE;
+CREATE VIEW public.storage_objects
+AS 
+
+SELECT
+aws_storage_objects.id, aws_storage_objects.name, aws_storage_objects.description, aws_storage_objects.storage_class, NULL AS azr_blob_type, aws_storage_objects.type, aws_storage_objects.size, aws_storage_objects.language, aws_storage_objects.md5hash, aws_storage_objects.metadata, aws_storage_objects.amz_website_redirect_location, NULL AS content_disposition, NULL AS lease_id, NULL AS lease_duration, aws_storage_objects.container_id, aws_storage_objects.object_level, aws_storage_objects.object_position
+FROM
+public.aws_storage_objects
+WHERE
+type = 'file'
+UNION ALL
+SELECT
+azr_storage_objects.id, azr_storage_objects.name, azr_storage_objects.description, NULL AS storage_class, azr_storage_objects.azr_blob_type, azr_storage_objects.type, azr_storage_objects.size, azr_storage_objects.language, azr_storage_objects.md5hash, azr_storage_objects.metadata, NULL AS amz_website_redirect_location, azr_storage_objects.content_disposition, azr_storage_objects.lease_id, azr_storage_objects.lease_duration, azr_storage_objects.container_id, azr_storage_objects.object_level, azr_storage_objects.object_position
+FROM
+public.azr_storage_objects
+WHERE
+type = 'file';
+-- ddl-end --
+ALTER VIEW public.storage_objects OWNER TO root;
+-- ddl-end --
+
 -- object: public.groups | type: TABLE --
 -- DROP TABLE IF EXISTS public.groups CASCADE;
 CREATE TABLE public.groups(
@@ -343,24 +337,24 @@ ALTER TABLE public.link_groups_permissions OWNER TO root;
 INSERT INTO public.link_groups_permissions (group_id,permission_id) VALUES ('1','1');
 -- ddl-end --
 
--- -- object: public.cloud_accounts | type: VIEW --
--- -- DROP VIEW IF EXISTS public.cloud_accounts CASCADE;
--- CREATE VIEW public.cloud_accounts
--- AS 
--- 
--- SELECT
--- aws_cloud_accounts.id, aws_cloud_accounts.login, aws_cloud_accounts.password, aws_cloud_accounts.aws_account_id, aws_cloud_accounts.aws_canonical_user_id, aws_cloud_accounts.aws_storage_account_id AS storage_account_id, aws_cloud_accounts.user_id, 'aws' AS cloud_vendor
--- FROM
--- public.aws_cloud_accounts
--- UNION ALL
--- SELECT
--- azr_cloud_accounts.id, azr_cloud_accounts.login, azr_cloud_accounts.password, azr_cloud_accounts.azr_subscription_id, '0' AS aws_canonical_user_id, azr_cloud_accounts.azr_storage_account_id AS storage_account_id, azr_cloud_accounts.user_id, 'azr' AS cloud_vendor
--- FROM 
--- public.azr_cloud_accounts;
--- -- ddl-end --
--- ALTER VIEW public.cloud_accounts OWNER TO root;
--- -- ddl-end --
--- 
+-- object: public.cloud_accounts | type: VIEW --
+-- DROP VIEW IF EXISTS public.cloud_accounts CASCADE;
+CREATE VIEW public.cloud_accounts
+AS 
+
+SELECT
+aws_cloud_accounts.id, aws_cloud_accounts.login, aws_cloud_accounts.password, aws_cloud_accounts.type, aws_cloud_accounts.aws_access_key_id, aws_cloud_accounts.aws_secret_access_key_id, aws_cloud_accounts.aws_account_id AS account_id, aws_cloud_accounts.aws_canonical_user_id,  NULL AS azr_storage_account_id, aws_cloud_accounts.user_id,'aws' AS cloud_vendor
+FROM
+public.aws_cloud_accounts
+UNION ALL
+SELECT
+azr_cloud_accounts.id, azr_cloud_accounts.login, azr_cloud_accounts.password, NULL AS type, NULL AS aws_access_key_id, NULL AS aws_secret_access_key_id, azr_cloud_accounts.azr_subscription_id AS account_id, NULL AS aws_canonical_user_id, azr_cloud_accounts.azr_storage_account_id, azr_cloud_accounts.user_id, 'azr' AS cloud_vendor
+FROM 
+public.azr_cloud_accounts;
+-- ddl-end --
+ALTER VIEW public.cloud_accounts OWNER TO root;
+-- ddl-end --
+
 -- object: public.aws_storage | type: TABLE --
 -- DROP TABLE IF EXISTS public.aws_storage CASCADE;
 CREATE TABLE public.aws_storage(
@@ -401,24 +395,24 @@ ALTER TABLE public.azr_storage OWNER TO root;
 INSERT INTO public.azr_storage (name,description,azr_storage_account_id) VALUES ('storageTwo','Mon Second Stockage -> Azure','1');
 -- ddl-end --
 
--- -- object: public.storage | type: VIEW --
--- -- DROP VIEW IF EXISTS public.storage CASCADE;
--- CREATE VIEW public.storage
--- AS 
--- 
--- SELECT
--- aws_storage.id, aws_storage.name, aws_storage.description, aws_storage.aws_storage_account_id, 'aws' AS cloud_vendor
--- FROM
--- public.aws_storage
--- UNION ALL
--- SELECT
--- azr_storage.id, azr_storage.name, azr_storage.description, azr_storage.azr_storage_account_id, 'azr' AS cloud_vendor
--- FROM 
--- public.azr_storage;
--- -- ddl-end --
--- ALTER VIEW public.storage OWNER TO root;
--- -- ddl-end --
--- 
+-- object: public.storage | type: VIEW --
+-- DROP VIEW IF EXISTS public.storage CASCADE;
+CREATE VIEW public.storage
+AS 
+
+SELECT
+aws_storage.id, aws_storage.name, aws_storage.description, aws_storage.aws_cloud_account_id, 'aws' AS cloud_vendor
+FROM
+public.aws_storage
+UNION ALL
+SELECT
+azr_storage.id, azr_storage.name, azr_storage.description, azr_storage.azr_storage_account_id, 'azr' AS cloud_vendor
+FROM 
+public.azr_storage;
+-- ddl-end --
+ALTER VIEW public.storage OWNER TO root;
+-- ddl-end --
+
 -- object: public.resources | type: TABLE --
 -- DROP TABLE IF EXISTS public.resources CASCADE;
 CREATE TABLE public.resources(
@@ -438,27 +432,26 @@ INSERT INTO public.resources (item_id,item_type) VALUES ('12','aws_storage');
 INSERT INTO public.resources (item_id,item_type) VALUES ('13','aws_storage');
 -- ddl-end --
 
--- -- object: public.storage_folders | type: VIEW --
--- -- DROP VIEW IF EXISTS public.storage_folders CASCADE;
--- CREATE VIEW public.storage_folders
--- AS 
--- 
--- SELECT
---    *
--- FROM
---    aws_storage_objects
--- WHERE
---    type = 'folder';
--- -- ddl-end --
--- ALTER VIEW public.storage_folders OWNER TO root;
--- -- ddl-end --
--- 
--- object: public.aws_storage_acl_type | type: TYPE --
--- DROP TYPE IF EXISTS public.aws_storage_acl_type CASCADE;
-CREATE TYPE public.aws_storage_acl_type AS
- ENUM ('private','public-read','public-read-write','authenticated-read','aws-exec-read','bucket-owner-read','bucket-owner-full-control');
+-- object: public.storage_folders | type: VIEW --
+-- DROP VIEW IF EXISTS public.storage_folders CASCADE;
+CREATE VIEW public.storage_folders
+AS 
+
+SELECT
+aws_storage_objects.id, aws_storage_objects.name, aws_storage_objects.description, aws_storage_objects.storage_class, NULL AS azr_blob_type, aws_storage_objects.type, aws_storage_objects.size, aws_storage_objects.language, aws_storage_objects.md5hash, aws_storage_objects.metadata, aws_storage_objects.amz_website_redirect_location, NULL AS content_disposition, NULL AS lease_id, NULL AS lease_duration, aws_storage_objects.container_id, aws_storage_objects.object_level, aws_storage_objects.object_position
+FROM
+public.aws_storage_objects
+WHERE
+type = 'folder'
+UNION ALL
+SELECT
+azr_storage_objects.id, azr_storage_objects.name, azr_storage_objects.description, NULL AS storage_class, azr_storage_objects.azr_blob_type, azr_storage_objects.type, azr_storage_objects.size, azr_storage_objects.language, azr_storage_objects.md5hash, azr_storage_objects.metadata, NULL AS amz_website_redirect_location, azr_storage_objects.content_disposition, azr_storage_objects.lease_id, azr_storage_objects.lease_duration, azr_storage_objects.container_id, azr_storage_objects.object_level, azr_storage_objects.object_position
+FROM
+public.azr_storage_objects
+WHERE
+type = 'folder';
 -- ddl-end --
-ALTER TYPE public.aws_storage_acl_type OWNER TO root;
+ALTER VIEW public.storage_folders OWNER TO root;
 -- ddl-end --
 
 -- object: public.aws_storage_containers | type: TABLE --
@@ -500,6 +493,24 @@ INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,st
 VALUES ('mon2Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
 INSERT INTO public.aws_storage_containers (name,description,creation_date,acl,storage_class,region,size,cache_control,cache_disposition,cache_encoding,expect,request_payment,versionning,lifecycle_configuration,policy_configuration,notification_configuration,logging_configuration,xregion_replication,tags,storage_id) 
 VALUES ('mon3Bucket','Mon tout premier',CURRENT_TIMESTAMP,'private','STANDARD','EU','65131561331','Osef','Osef','Osef','1','0','1','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','{"nothing": "oui"}','1');
+-- ddl-end --
+
+-- object: public.storage_containers | type: VIEW --
+-- DROP VIEW IF EXISTS public.storage_containers CASCADE;
+CREATE VIEW public.storage_containers
+AS 
+
+SELECT
+aws_storage_containers.id, aws_storage_containers.name, aws_storage_containers.description, aws_storage_containers.creation_date, aws_storage_containers.acl, aws_storage_containers.storage_class, aws_storage_containers.region, aws_storage_containers.size, aws_storage_containers.cache_control, aws_storage_containers.cache_disposition, aws_storage_containers.cache_encoding, aws_storage_containers.expect, aws_storage_containers.request_payment, aws_storage_containers.versionning, aws_storage_containers.lifecycle_configuration, aws_storage_containers.policy_configuration, aws_storage_containers.notification_configuration, aws_storage_containers.logging_configuration, aws_storage_containers.xregion_replication, aws_storage_containers.tags, NULL AS metadata, aws_storage_containers.storage_id, 'aws' AS cloud_vendor
+FROM
+public.aws_storage_containers
+UNION ALL
+SELECT
+azr_storage_containers.id, azr_storage_containers.name, azr_storage_containers.description, NULL AS creation_date, NULL AS acl, NULL AS storage_class, NULL AS region, NULL AS size, azr_storage_containers.cache_control, azr_storage_containers.cache_disposition, azr_storage_containers.cache_encoding, azr_storage_containers.expect, NULL AS request_payment, NULL AS versionning, NULL AS lifecycle_configuration, NULL AS policy_configuration, NULL AS notification_configuration, NULL AS logging_configuration, NULL AS xregion_replication, NULL AS tags, azr_storage_containers.metadata, azr_storage_containers.storage_id, 'azr' AS cloud_vendor
+FROM 
+public.azr_storage_containers;
+-- ddl-end --
+ALTER VIEW public.storage_containers OWNER TO root;
 -- ddl-end --
 
 -- object: public.cors_configuration | type: TABLE --
