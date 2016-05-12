@@ -401,12 +401,12 @@ CREATE VIEW public.storage
 AS 
 
 SELECT
-aws_storage.id, aws_storage.name, aws_storage.description, aws_storage.aws_cloud_account_id, 'aws' AS cloud_vendor
+aws_storage.id, aws_storage.name, aws_storage.description, aws_storage.aws_cloud_account_id, NULL AS azr_storage_account_id, 'aws' AS cloud_vendor
 FROM
 public.aws_storage
 UNION ALL
 SELECT
-azr_storage.id, azr_storage.name, azr_storage.description, azr_storage.azr_storage_account_id, 'azr' AS cloud_vendor
+azr_storage.id, azr_storage.name, azr_storage.description, NULL AS aws_cloud_account_id, azr_storage.azr_storage_account_id, 'azr' AS cloud_vendor
 FROM 
 public.azr_storage;
 -- ddl-end --
