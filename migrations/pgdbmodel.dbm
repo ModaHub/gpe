@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.2-beta1" author="bouren_n" last-position="0,126" last-zoom="0.8"
+<dbmodel pgmodeler-ver="0.8.2-beta1" author="bouren_n" last-position="651,0" last-zoom="0.8"
 	 default-schema="public" default-owner="root">
 <role name="root"
       superuser="true"
@@ -556,12 +556,12 @@ INSERT INTO public.aws_storage (id,name,description,aws_cloud_account_id) VALUES
 	<position x="1823.25" y="634.25"/>
 	<reference>
 		<expression><![CDATA[SELECT
-aws_storage.id, aws_storage.name, aws_storage.description, aws_storage.aws_cloud_account_id, 'aws' AS cloud_vendor
+aws_storage.id, aws_storage.name, aws_storage.description, aws_storage.aws_cloud_account_id, NULL AS azr_storage_account_id, 'aws' AS cloud_vendor
 FROM
 public.aws_storage
 UNION ALL
 SELECT
-azr_storage.id, azr_storage.name, azr_storage.description, azr_storage.azr_storage_account_id, 'azr' AS cloud_vendor
+azr_storage.id, azr_storage.name, azr_storage.description, NULL AS aws_cloud_account_id, azr_storage.azr_storage_account_id, 'azr' AS cloud_vendor
 FROM 
 public.azr_storage;]]></expression>
 	</reference>
