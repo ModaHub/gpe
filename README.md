@@ -4,7 +4,7 @@
 npm install
 ```
 
-##Run:
+##Run
 ```
 npm run start
 ```
