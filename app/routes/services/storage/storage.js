@@ -13,9 +13,11 @@ module.exports = function (app) {
     */
 
     app.get('/:cloud_provider/storage', Storage.getStorages);
-    app.get('/:cloud_provider/storage/:storage_id', Storage.getStorage);
-    // app.get('/:cloud_provider/storage/containers', Storage.getContainers);
-    // app.get('/:cloud_provider/storage/containers/:container_id', Storage.getContainer);
+    app.get('/:cloud_provider/storage/:storage_id([0-9]+)', Storage.getStorage);
+
+    app.get('/:cloud_provider/storage/containers', Storage.getContainers);
+    app.get('/:cloud_provider/storage/containers/:container_id([0-9]+)', Storage.getContainer);
+
     // app.get('/:cloud_provider/storage/containers/:container_id/objects/:object_id', Storage.getObjectFromContainer);
     // app.get('/:cloud_provider/storage/objects', Storage.getObjects);
 
@@ -23,7 +25,7 @@ module.exports = function (app) {
     // app.put('/:cloud_provider/storage/containers', Storage.putContainer);
     // app.put('/:cloud_provider/storage/:container_id/objects', Storage.putObject);
 
-    // app.post('/:cloud_provider/storage', Storage.postStorage);
+    app.post('/:cloud_provider/storage', Storage.postStorage);
     // app.post('/:cloud_provider/storage/containers', Storage.updateContainer);
     // app.post('/:cloud_provider/storage/:container_id/objects', Storage.updateObject);
 

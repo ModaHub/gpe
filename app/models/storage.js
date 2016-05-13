@@ -1,10 +1,10 @@
 // storage.js
 'use strict';
 
-var orm = require('./orm');
+var orm 	 	   = require('./orm.js');
+var requireDir     = require('require-dir');
+var storage_models = requireDir("./storages");
 
-var storage = orm.Model.extend({
-  tableName: 'storage'
-});
 
-module.exports = orm.model('storage', storage);
+for (var model in storage_models)
+	console.log(model.tableName);
