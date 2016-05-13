@@ -1,5 +1,5 @@
 // app/routes/services/storage/storage.js
-var Storage = require ('../../../controllers/services/storage/StorageCtrl.js');
+var Storage = require ('../../../controllers/services/StorageCtrl.js');
 
 module.exports = function (app) {
     /**GET**/
