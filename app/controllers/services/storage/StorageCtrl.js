@@ -1,60 +1,63 @@
 // app/controllers/services/storage/StorageCtrl.js
 var storage = require("../../../models/storage");
 
-// ======================= GET =======================
-module.exports.getStorages = function(req, res) {
-    storage.where({'cloud_vendor': req.cloud_provider})
-        .fetch()
+function getQuery(module, datas) {
+    module.where(datas)
+        .fetchAll()
         .then(function(result){
-            return res.status(200).json(result);
+            if (null === result)
+                return res.status(200).json([]);
+            else
+                return res.status(200).json(result);
         })
         .catch(function(error) {
             return res.status(400).json(error);
         });
 }
 
+// ======================= GET =======================
+module.exports.getStorages = function(req, res) {
+    getQuery(storage[''], {'cloud_vendor': req.cloud_provider});
+}
+
 module.exports.getStorage = function(req, res) {
-    storage.where({'id': req.storage_id})
-    .fetch()
-    .then(function(result){
-        if (null === result)
-            return res.status(404).json("Storage not found");
-        else
-            return res.status(200).json(result);
-    })
-    .catch(function(error) {
-        return res.status(400).json(error);
-    });
+    getQuery(storage, {'cloud_vendor': req.cloud_provider, 'id': req.params.storage_id});
 }
 
 module.exports.getContainers = function (req, res) {
-    return res.status(200).json("getContainers");
+    getQuery(storage_container, {'cloud_vendor': req.cloud_provider});
 };
 
 module.exports.getContainer = function (req, res) {
-    return res.status(200).json("getContainer");
-};
-
-module.exports.getObjectFromContainer = function (req, res) {
-    return res.status(200).json("getObjectFromContainer");
+    getQuery(storage_container, {'cloud_vendor': req.cloud_provider, 'id': req.params.storage_id});
 };
 
 module.exports.getObjects = function (req, res) {
-    return res.status(200).json("getObjects");
+    getQuery(storage_container, {'cloud_vendor': req.cloud_provider});
 }
+
+// module.exports.getObject = function (req, res) {
+//     return res.status(200).json("getObjects");
+// }
+
+// module.exports.getObjectFromContainer = function (req, res) {
+//     return res.status(200).json("getObjectFromContainer");
+// };
 
 // ======================= POST =======================
 module.exports.postStorage = function(req, res) {
+    aws_storage.add([]);
+
     return res.status(200).json("postStorage");
 }
 
-module.exports.updateContainer = function (req, res) {
-    return res.status(200).json('updateContainer');
-};
+// module.exports.updateContainer = function (req, res) {
+//     return res.status(200).json('updateContainer');
+// };
 
-module.exports.updateObject = function (req, res) {
-    return res.status(200).json('updateObject');
-};
+// module.exports.updateObject = function (req, res) {
+//     return res.status(200).json('updateObject');
+// };
 
 
 // ======================= PUT =======================
