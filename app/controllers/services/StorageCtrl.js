@@ -1,7 +1,7 @@
 // app/controllers/services/storage/StorageCtrl.js
-var storage = require("../../../models/storage");
+var orm = require("../../models/storage");
 
-function getQuery(module, datas) {
+function getQuery(res, module, datas) {
     module.where(datas)
         .fetchAll()
         .then(function(result){
@@ -17,23 +17,49 @@ function getQuery(module, datas) {
 
 // ======================= GET =======================
 module.exports.getStorages = function(req, res) {
-    getQuery(storage[''], {'cloud_vendor': req.cloud_provider});
+    getQuery(
+        res,
+        orm._models.storage,
+        {'cloud_vendor': req.cloud_provider}
+    );
 }
 
 module.exports.getStorage = function(req, res) {
-    getQuery(storage, {'cloud_vendor': req.cloud_provider, 'id': req.params.storage_id});
+    getQuery(
+        res,
+        orm._models.storage,
+        {
+            'cloud_vendor': req.cloud_provider,
+            'id': req.params.storage_id
+        }
+    );
 }
 
 module.exports.getContainers = function (req, res) {
-    getQuery(storage_container, {'cloud_vendor': req.cloud_provider});
+    getQuery(
+        res,
+        orm._models.storage_container,
+        {'cloud_vendor': req.cloud_provider}
+    );
 };
 
 module.exports.getContainer = function (req, res) {
-    getQuery(storage_container, {'cloud_vendor': req.cloud_provider, 'id': req.params.storage_id});
+    getQuery(
+        res,
+        orm._models.storage_container,
+        {
+            'cloud_vendor': req.cloud_provider,
+            'id': req.params.storage_id
+        }
+    );
 };
 
 module.exports.getObjects = function (req, res) {
-    getQuery(storage_container, {'cloud_vendor': req.cloud_provider});
+    getQuery(
+        res,
+        orm._models.storage_container,
+        {'cloud_vendor': req.cloud_provider}
+    );
 }
 
 // module.exports.getObject = function (req, res) {
@@ -46,8 +72,6 @@ module.exports.getObjects = function (req, res) {
 
 // ======================= POST =======================
 module.exports.postStorage = function(req, res) {
-    aws_storage.add([]);
-
     return res.status(200).json("postStorage");
 }
 
