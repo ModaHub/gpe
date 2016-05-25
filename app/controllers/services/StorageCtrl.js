@@ -1,23 +1,10 @@
 // app/controllers/services/storage/StorageCtrl.js
-var orm = require("../../models/storage");
-
-function getQuery(res, module, datas) {
-    module.where(datas)
-        .fetchAll()
-        .then(function(result){
-            if (null === result)
-                return res.status(200).json([]);
-            else
-                return res.status(200).json(result);
-        })
-        .catch(function(error) {
-            return res.status(400).json(error);
-        });
-}
+var orm       = require("../../models/storage");
+var orm_utils = require('../../utils/ormUtils.js');
 
 // ======================= GET =======================
 module.exports.getStorages = function(req, res) {
-    getQuery(
+    orm_utils.getQuery(
         res,
         orm._models.storage,
         {'cloud_vendor': req.cloud_provider}
@@ -25,18 +12,18 @@ module.exports.getStorages = function(req, res) {
 }
 
 module.exports.getStorage = function(req, res) {
-    getQuery(
+    orm_utils.getQuery(
         res,
         orm._models.storage,
         {
             'cloud_vendor': req.cloud_provider,
-            'id': req.params.storage_id
+            'id': req.params.id
         }
     );
 }
 
 module.exports.getContainers = function (req, res) {
-    getQuery(
+    orm_utils.getQuery(
         res,
         orm._models.storage_container,
         {'cloud_vendor': req.cloud_provider}
@@ -44,18 +31,18 @@ module.exports.getContainers = function (req, res) {
 };
 
 module.exports.getContainer = function (req, res) {
-    getQuery(
+    orm_utils.getQuery(
         res,
         orm._models.storage_container,
         {
             'cloud_vendor': req.cloud_provider,
-            'id': req.params.storage_id
+            'id': req.params.id
         }
     );
 };
 
 module.exports.getObjects = function (req, res) {
-    getQuery(
+    orm_utils.getQuery(
         res,
         orm._models.storage_container,
         {'cloud_vendor': req.cloud_provider}
@@ -72,7 +59,22 @@ module.exports.getObjects = function (req, res) {
 
 // ======================= POST =======================
 module.exports.postStorage = function(req, res) {
-    return res.status(200).json("postStorage");
+    var model         = req.cloud_provider + '_storage';
+    var cloud_account = model + '_account_id';
+
+    var datas = {
+        'name':         'storage3',
+        'description':  'hello'
+    };
+    datas[cloud_account] = 1;
+    orm._models[model].forge(datas)
+    .save()
+    .then(function (model){
+        return res.status(200).json("postStorage");
+    })
+    .catch(function (error) {
+        return res.status(400).json(error);
+    });
 }
 
 // module.exports.updateContainer = function (req, res) {
@@ -86,7 +88,8 @@ module.exports.postStorage = function(req, res) {
 
 // ======================= PUT =======================
 module.exports.putStorage = function(req, res) {
-    return res.status(200).json("putStorage");
+    console.log(req.storage);
+    return res.status(200).json(req.storage);
 }
 
 module.exports.putContainer = function (req, res) {
