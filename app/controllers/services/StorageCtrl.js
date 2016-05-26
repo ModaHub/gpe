@@ -1,12 +1,13 @@
 // app/controllers/services/storage/StorageCtrl.js
 var orm       = require("../../models/storage");
 var orm_utils = require('../../utils/ormUtils.js');
+var Storage   = orm._models.storage;
 
 // ======================= GET =======================
 module.exports.getStorages = function(req, res) {
     orm_utils.getQuery(
         res,
-        orm._models.storage,
+        Storage,
         {'cloud_vendor': req.cloud_provider}
     );
 }
@@ -60,20 +61,24 @@ module.exports.getObjects = function (req, res) {
 // ======================= POST =======================
 module.exports.postStorage = function(req, res) {
     var model         = req.cloud_provider + '_storage';
-    var cloud_account = model + '_account_id';
+
+    if (typeof req.body.name !== 'string' || typeof Number(req.body.cloud_account_id) !== 'number') {
+        return res.status(400).json("Bad request");
+    }
 
     var datas = {
-        'name':         'storage3',
-        'description':  'hello'
+        name:        req.body.name,
+        description: req.body.description || '',
     };
-    datas[cloud_account] = 1;
+
+    datas[req.cloud_provider + '_cloud_account_id'] = req.body.cloud_account_id;
     orm._models[model].forge(datas)
     .save()
-    .then(function (model){
-        return res.status(200).json("postStorage");
+    .then(function (save){
+        return res.status(200).json(save);
     })
     .catch(function (error) {
-        return res.status(400).json(error);
+        return res.status(400).json({errorMsg: "Error while writing", datas: datas});
     });
 }
 
@@ -88,7 +93,6 @@ module.exports.postStorage = function(req, res) {
 
 // ======================= PUT =======================
 module.exports.putStorage = function(req, res) {
-    console.log(req.storage);
     return res.status(200).json(req.storage);
 }
 
