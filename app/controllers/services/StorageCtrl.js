@@ -60,9 +60,9 @@ module.exports.getObjects = function (req, res) {
 
 // ======================= POST =======================
 module.exports.postStorage = function(req, res) {
-    var model         = req.cloud_provider + '_storage';
+    var model = req.cloud_provider + '_storage';
 
-    if (typeof req.body.name !== 'string' || typeof Number(req.body.cloud_account_id) !== 'number') {
+    if (typeof req.body.name !== 'string' || typeof Number(req.body.account_id) !== 'number') {
         return res.status(400).json("Bad request");
     }
 
@@ -71,13 +71,22 @@ module.exports.postStorage = function(req, res) {
         description: req.body.description || '',
     };
 
-    datas[req.cloud_provider + '_cloud_account_id'] = req.body.cloud_account_id;
+    switch (req.cloud_provider) {
+        case 'azr':
+            datas['azr_storage_account_id'] = req.body.account_id;
+            break;
+        case 'aws':
+            datas['aws_cloud_account_id'] = req.body.account_id;
+            break;
+        default:
+            return res.status(400).json("Cloud provider not handled");
+    }
+
     orm._models[model].forge(datas)
     .save()
     .then(function (save){
         return res.status(200).json(save);
-    })
-    .catch(function (error) {
+    }).catch(function (error) {
         return res.status(400).json({errorMsg: "Error while writing", datas: datas});
     });
 }
@@ -93,7 +102,13 @@ module.exports.postStorage = function(req, res) {
 
 // ======================= PUT =======================
 module.exports.putStorage = function(req, res) {
-    return res.status(200).json(req.storage);
+    var storage = req.storage;
+
+    storage.save(req.body).then(function (save) {
+        return res.status(200).json(save);
+    }).catch(function (error) {
+        return res.status(400).json({errorMsg: "Error while updating", datas: req.body});
+    })
 }
 
 module.exports.putContainer = function (req, res) {

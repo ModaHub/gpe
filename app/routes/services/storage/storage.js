@@ -21,7 +21,7 @@ module.exports = function (app) {
     // app.get('/:cloud_provider/storage/containers/:container_id/objects/:object_id', Storage.getObjectFromContainer);
     // app.get('/:cloud_provider/storage/objects', Storage.getObjects);
 
-    app.put('/:cloud_provider/storage/:storage_id', Storage.putStorage);
+    app.put('/:cloud_provider/storage/:storage_id([0-9]+)', Storage.putStorage);
     // app.put('/:cloud_provider/storage/containers', Storage.putContainer);
     // app.put('/:cloud_provider/storage/:container_id/objects', Storage.putObject);
 

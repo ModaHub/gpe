@@ -13,7 +13,6 @@ npm install
 
 ##Databases
 
-<<<<<<< cc287bb071edae2a935947750eeec96596616e20
 ####Sprint End Report
 File : config/**production**.json
 ####Devs Working Database
@@ -23,10 +22,7 @@ File : config/**testing**.json
 
 ##Basic Postgres Commands
 ####Connection
-=======
-```javascript
-postgresql://root:etna42@37.59.60.163:5432/gpe
->>>>>>> [W-I-P]
+
 ```
 ssh gpe@cerebrow.com / mdp: gpe42
 psql [production/development/testing] root

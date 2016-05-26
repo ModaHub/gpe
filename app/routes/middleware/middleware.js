@@ -9,16 +9,16 @@ module.exports = function (app) {
         req.cloud_provider = provider;
         next();
     });
-    // app.param('storage_id', function (req, res, next, id) {
-    // 	var model = req.cloud_provider + '_storage';
-    //     orm._models[model].where({'id': id})
-    //     .fetch()
-    //     .then(function(req, result){
-    //         req.storage = result;
-    //     })
-    //     .catch(function(error) {
-    //         return res.status(400).json("Storage not found");
-    //     });
-    // 	next();
-    // });
+    app.param('storage_id', function (req, res, next, id) {
+        var model = req.cloud_provider + '_storage';
+        orm._models[model].where({id: id})
+        .fetch()
+        .then(function (result) {
+            req.storage = result;
+            next();
+        })
+        .catch(function (error) {
+            next(error);
+        });
+    });
 };
