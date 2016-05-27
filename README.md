@@ -6,7 +6,7 @@ npm install
 
 ##Run
 ```
-npm run start
+	npm start
 ```
 -----
 #Database Configuration :
@@ -22,6 +22,7 @@ File : config/**testing**.json
 
 ##Basic Postgres Commands
 ####Connection
+
 ```
 ssh gpe@cerebrow.com / mdp: gpe42
 psql [production/development/testing] root
@@ -48,7 +49,7 @@ psql [production/development/testing] root
 Allows users to manage different cloud vendor storage service like Azure Storage and Amazon S3 uniformly.
 
 ##Basic Management
-Action                  | Description           
+Action                  | Description
 ----------------------- | -----------------------
 **Add/Edit/Delete** (1) | a **Storage Space**: AWS, AZR or vStorage
 **Add/Edit/Delete** (2) | a **Container**: AWS Bucket, AZR Container, vContainer
@@ -68,7 +69,7 @@ Action                  | Description
 ##Advanced Management
 Managing different Cloud storage services from one vStorage Space :
 
-Action              | Description           
+Action              | Description
 ------------------- | -----------------------
 **Add/Edit/Delete** | a **vCloud** with AWS Storage and AZR Storage inside as members
 **Add/Edit/Delete** | a **Container/Folder/Object** in the vCloud and propagate it
@@ -81,7 +82,7 @@ Action              | Description
 ##Expert Management
 Expert Actions that should be **carefully** executed :
 
-Action          | Description           
+Action          | Description
 --------------- | -----------------------
 **Synchronize** | **Retrieve** Distant Cloud Information **to the Appliance**
 **Push**        | **Push** Appliance Information **to the Distant Cloud**
@@ -92,7 +93,7 @@ Action          | Description
 ##Architecture
 
 ###Four levels
-Item                 | Description           
+Item                 | Description
 -------------------- |-----------------------
 1. **Storage Space** | *Virtual: Represents the storage service by Cloud Vendor*
 2. **Container**     | *Physical: exists in AWS as "Bucket" and in AZR as "Container"*
@@ -119,4 +120,3 @@ Item                 | Description
 ##Documentation
 * [Amazon Nodejs SDK Documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/)
 * [Azure Nodejs SDK Doccumentation](http://azure.github.io/azure-sdk-for-node/)
-

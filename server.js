@@ -1,19 +1,13 @@
 // server.js
 
 // modules =================================================
-var express         = require('express');
-var app             = express();
-var bodyParser      = require('body-parser');
-var methodOverride  = require('method-override');
-var requireDir      = require('require-dir');
-var objectFlatten   = require('./app/utils/objectFlatten');
-var routes          = requireDir('./app/routes', {recurse: true});
-var db              = require('./app/models');
-
-// configuration ===========================================
-var env    = process.env.NODE_ENV || 'testing';
-var config = require('./config/' + env);
-
+var express        = require('express');
+var app            = express();
+var bodyParser     = require('body-parser');
+var methodOverride = require('method-override');
+var requireDir     = require('require-dir');
+var objectFlatten  = require('./app/utils/objectFlatten');
+var routes         = requireDir('./app/routes', {recurse: true});
 // expose app
 exports = module.exports = app;
 
@@ -37,8 +31,6 @@ for (var route in routes) {
 }
 
 // start app ===============================================
-db.sequelize.sync().then(function() {
-    var server = app.listen((config.port), function() {
-        console.log(config.hostname + ': Magic happens on ' + config.ip + ":" + config.port);
-    });
+var server = app.listen((8080), function() {
+    console.log('Magic happens on localhost:8080');
 });
