@@ -26,7 +26,7 @@ module.exports = function (app) {
     // app.put('/:cloud_provider/storage/:container_id/objects', Storage.putObject);
 
     app.post('/:cloud_provider/storage', Storage.postStorage);
-    // app.post('/:cloud_provider/storage/containers', Storage.updateContainer);
+    app.post('/:cloud_provider/storage/containers', Storage.postContainer);
     // app.post('/:cloud_provider/storage/:container_id/objects', Storage.updateObject);
 
     // app.delete('/:cloud_provider/storage/containers', Storage.deleteContainer);
