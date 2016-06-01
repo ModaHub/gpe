@@ -20,13 +20,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({  : true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // override with the X-HTTP-Method-Override header in the request. simulate DELETE/PUT
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // AWS SDK =================================================
 
+app.set('awsTools', AWS);
 
 // routes ==================================================
 routes = objectFlatten(routes);
