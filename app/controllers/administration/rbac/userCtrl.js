@@ -1,8 +1,8 @@
 // app/controllers/administration/rbac/userCtrl.js
-var orm        = require("../../models/users");
-var orm_utils  = require('../../utils/ormUtils.js');
-var arrayUtils = require('../../utils/inArray');
-var User    = orm._models.user;
+var orm        = require("../../../models/rbac");
+var orm_utils  = require('../../../utils/ormUtils.js');
+var arrayUtils = require('../../../utils/inArray');
+var User       = orm._models.users;
 
 // ======================= GET =======================
 module.exports.getUsers = function(req, res) {
@@ -35,7 +35,7 @@ module.exports.putUser = function(req, res) {
 
 // ======================= POST =======================
 module.exports.postUser = function(req, res) {
-    var model   = 'user';
+    var model   = 'users';
 
     var datas = {
         name:        req.body.name,

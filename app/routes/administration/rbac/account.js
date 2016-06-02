@@ -7,7 +7,7 @@ module.exports = function (app) {
 
     app.post('/accounts', Account.addAccount);
 
-    app.put('/accounts/:id', Account.updateAccount);
+    app.put('/accounts/:account_id', Account.updateAccount);
 
     app.delete('/accounts/:account_id', Account.deleteAccount);
 };

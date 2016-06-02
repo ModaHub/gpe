@@ -7,7 +7,7 @@ module.exports = function (app) {
 
     app.post('/resources', Resource.addResource);
 
-    app.put('/resources/:id', Resource.updateResource);
+    app.put('/resources/:resource_id', Resource.updateResource);
 
     app.delete('/resources/:resource_id', Resource.deleteResource);
 };
