@@ -35,7 +35,7 @@ module.exports.putAccount = function(req, res) {
 
 // ======================= POST =======================
 module.exports.postAccount = function(req, res) {
-    var model   = 'account';
+    var model   = 'accounts';
 
     var datas = {
         name:        req.body.name,
