@@ -2,12 +2,14 @@
 var Account = require ('../../../controllers/administration/rbac/accountCtrl.js');
 
 module.exports = function (app) {
-//    app.get('/accounts/', Account.getAccounts);
-//    app.get('/accounts/:account_id', Account.getAccount);
+    app.get('/accounts/', Account.getAccounts);
+    app.get('/:cloud_provider/accounts/', Account.getAccounts);
+    app.get('/:cloud_provider/accounts/:account_id([0-9]+)', Account.getAccount);
+    app.get('/:cloud_provider/accounts/:account_id([0-9]+/users)', Account.getUsersIntoAccount);
 
-//    app.post('/accounts', Account.addAccount);
+    app.post('/:cloud_provider/accounts', Account.postAccount);
 
-//    app.put('/accounts/:account_id', Account.updateAccount);
+//    app.put('/accounts/:account_id', Account.putAccount);
 
-//    app.delete('/accounts/:account_id', Account.deleteAccount);
+    app.delete('/:cloud_provider/accounts/:account_id', Account.deleteAccount);
 };

@@ -1,49 +1,97 @@
 // app/controllers/administration/rbac/resourceCtrl.js
-var orm        = require("../../../models/rbac");
-var orm_utils  = require('../../../utils/ormUtils.js');
-var arrayUtils = require('../../../utils/inArray');
-var Resource    = orm._models.resources;
+var bcrypt     = require('bcrypt');
+var orm        = require('../../../models/rbac');
+var Resource   = orm._models.resources;
+var Permission = orm._models.permissions;
 
 // ======================= GET =======================
 module.exports.getResources = function(req, res) {
-    orm_utils.getQuery(
-        res,
-        Resource
-    );
-}
+    var query = Resource.fetchAll();
+
+    var results = query.then(function (datas) {
+        res.status(200).json(datas);
+    }).catch(function (error) {
+        return res.status(400).json({errorMsg: 'Error while retrieving datas'});
+    });
+};
 
 module.exports.getResource = function(req, res) {
-    orm_utils.getQuery(
-        res,
-        Resource,
-        {
-            'id': req.params.id
-        }
-    );
-}
+    if (!req.params.resource_id){
+        res.status(422).json({errorMsg: 'Missing parameter: resource_id'});
+    }
+    else
+    {
+        var resource_id = {'id': req.params.resource_id};
 
-// ======================= PUT =======================
-module.exports.putResource = function(req, res) {
-    var resource = req.resource;
+        var query = Resource.where(resource_id).fetchAll();
+        var results = query.then(function(datas) {
+            res.status(200).json(datas);
+        }).catch(function (error) {
+            return res.status(400).json({errorMsg: 'Error while retrieving datas'});
+        });
+    }
+};
 
-    resource.save(req.body).then(function (save) {
-        return res.status(200).json(save);
-    }).catch(function (error) {
-        return res.status(400).json({errorMsg: "Error while updating", datas: req.body});
-    })
-}
+module.exports.getGroupsIntoResource = function(req, res) {
+    if (!req.params.resource_id){
+        res.status(422).json({errorMsg: 'Missing parameter: resource_id'});
+    }
+    else
+    {
+        var resource_id = {'id': req.params.resource_id};
+
+        var query = Permission.where(resource_id).fetch({withRelated: ['group']});
+        var results = query.then(function(datas) {
+            res.status(200).json(datas);
+        }).catch(function (error) {
+            return res.status(400).json({errorMsg: 'Error while retrieving datas'});
+        });
+    }
+};
 
 // ======================= POST =======================
 module.exports.postResource = function(req, res) {
-    var model   = 'resource';
+    if (!req.body.login){
+        res.status(422).json('Missing parameter: login');
+    }
+    else if (!req.body.password) {
+        res.status(422).json('Missing parameter: password');
+    }
+    else
+    {
+        var datas = req.body;
 
-    var datas = {
-        name:        req.body.name,
-        description: req.body.description || '',
-    };
+        var query = Resource.forge(datas).save();
+        var results = query.then(function(datas) {
+            res.status(200).json(datas);
+        }).catch(function (error) {
+            return res.status(400).json({errorMsg: 'Error while writing', datas: datas});
+        });
+    }
+};
+
+// ======================= PUT =======================
+module.exports.putResource = function(req, res) {
+    return res.status(200).json('updateResource');
 };
 
 // ======================= DELETE =======================
-module.exports.deleteResource = function (req, res) {
-    return res.status(200).json('deleteResource');
+module.exports.deleteResource = function (req, res) { 
+    if (!req.params.resource_id){
+        res.status(422).json('Missing parameter: resource_id');
+    }
+    else
+    {
+    var query = Permission.forge({id: req.params.resource_id})
+        .fetch({require: true})
+        .then(function (datas) {
+            datas.destroy()
+        });
+
+    var results= query.then(function (destroy) {
+        res.status(200).json({successMsg: 'Resource deleted'});
+    }).catch(function (error) {
+        res.status(500).json({errorMsg: 'Error while deleting data'});
+    });
+}
 };

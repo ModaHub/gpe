@@ -7,10 +7,8 @@ module.exports = function (app) {
     app.get('/users/:user_id/accounts', User.getAccountsIntoUser);
 
     app.post('/users', User.postUser);
-//    app.post('/users/:user_id/accounts/:account_id', User.postAccountIntoUser);
 
-//    app.put('/users/:user_id', User.updateUser);
+    app.put('/users/:user_id', User.putUser);
 
     app.delete('/users/:user_id', User.deleteUser);
-//    app.delete('/users/:user_id/accounts/:account_id', User.deleteAccountIntoUser);
 };

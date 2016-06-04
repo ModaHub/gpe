@@ -3,8 +3,12 @@
 
 var users = orm.Model.extend({
   tableName: 'users',
+
   accounts: function() {
-      return this.hasOne(Account);
+      return this.belongsTo(Account);
+  },
+  groups: function() {
+      return this.belongsToMany(Group, 'link_groups_users');
   }
 });
 

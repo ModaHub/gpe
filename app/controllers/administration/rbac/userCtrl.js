@@ -2,7 +2,7 @@
 var bcrypt     = require('bcrypt');
 var orm        = require('../../../models/rbac');
 var User       = orm._models.users;
-var Account    = orm._models.accounts_view;
+var Account    = orm._models.accounts;
 
 // ======================= GET =======================
 module.exports.getUsers = function(req, res) {
@@ -13,41 +13,29 @@ module.exports.getUsers = function(req, res) {
     }).catch(function (error) {
         return res.status(400).json({errorMsg: 'Error while retrieving datas'});
     });
-}
+};
 
 module.exports.getUser = function(req, res) {
-    if (!req.params.user_id){
-        res.status(422).json({errorMsg: 'Missing parameter: user_id'});
-    }
-    else
-    {
-        var user_id = {'id': req.params.user_id};
+        var params = {'id': req.params.user_id};
 
-        var query = User.where(user_id).fetchAll();
+        var query = User.where(params).fetchAll();
         var results = query.then(function(datas) {
             res.status(200).json(datas);
         }).catch(function (error) {
             return res.status(400).json({errorMsg: 'Error while retrieving datas'});
         });
-    }
-}
+};
 
 module.exports.getAccountsIntoUser = function(req, res) {
-    if (!req.params.user_id){
-        res.status(422).json({errorMsg: 'Missing parameter: user_id'});
-    }
-    else
-    {
-        var user_id = {'id': req.params.user_id};
+        var params = {'id': req.params.user_id};
 
-        var query = Account.fetchAll();
+        var query = Account.forge(params).fetch({withRelated: ['users']});
         var results = query.then(function(datas) {
             res.status(200).json(datas);
         }).catch(function (error) {
             return res.status(400).json({errorMsg: 'Error while retrieving datas'});
         });
-    }
-}
+};
 
 // ======================= POST =======================
 module.exports.postUser = function(req, res) {
@@ -68,7 +56,7 @@ module.exports.postUser = function(req, res) {
             return res.status(400).json({errorMsg: 'Error while writing', datas: datas});
         });
     }
-}
+};
 
 // ======================= PUT =======================
 module.exports.putUser = function(req, res) {
@@ -77,7 +65,11 @@ module.exports.putUser = function(req, res) {
 
 // ======================= DELETE =======================
 module.exports.deleteUser = function (req, res) { 
-
+    if (!req.params.user_id){
+        res.status(422).json('Missing parameter: user_id');
+    }
+    else
+    {
     var query = User.forge({id: req.params.user_id})
         .fetch({require: true})
         .then(function (datas) {
@@ -89,4 +81,5 @@ module.exports.deleteUser = function (req, res) {
     }).catch(function (error) {
         res.status(500).json({errorMsg: 'Error while deleting data'});
     });
+}
 };
