@@ -8,6 +8,7 @@ var methodOverride = require('method-override');
 var requireDir     = require('require-dir');
 var objectFlatten  = require('./app/utils/objectFlatten');
 var routes         = requireDir('./app/routes', {recurse: true});
+var AWS            = require('aws-sdk');
 // expose app
 exports = module.exports = app;
 
@@ -23,6 +24,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // override with the X-HTTP-Method-Override header in the request. simulate DELETE/PUT
 app.use(methodOverride('X-HTTP-Method-Override'));
+
+// AWS SDK =================================================
+
+app.set('awsTools', AWS);
 
 // routes ==================================================
 routes = objectFlatten(routes);
