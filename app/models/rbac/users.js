@@ -5,7 +5,13 @@ var users = orm.Model.extend({
   tableName: 'users',
 
   accounts: function() {
-      return this.belongsTo(Account);
+      return this.belongsTo(Account, 'user_id');
+  },
+  aws_accounts: function() {
+      return this.belongsTo(AWSAccount, 'user_id');
+  },
+  azr_accounts: function() {
+      return this.belongsTo(AZRAccount, 'user_id');
   },
   groups: function() {
       return this.belongsToMany(Group, 'link_groups_users');

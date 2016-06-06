@@ -4,7 +4,7 @@ var User = require ('../../../controllers/administration/rbac/userCtrl.js');
 module.exports = function (app) {
     app.get('/users/', User.getUsers);
     app.get('/users/:user_id', User.getUser);
-    app.get('/users/:user_id/accounts', User.getAccountsIntoUser);
+    app.get('/users/:user_id/accounts', User.getUserAccounts);
 
     app.post('/users', User.postUser);
 

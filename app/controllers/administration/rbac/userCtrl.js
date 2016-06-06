@@ -26,10 +26,10 @@ module.exports.getUser = function(req, res) {
         });
 };
 
-module.exports.getAccountsIntoUser = function(req, res) {
-        var params = {'id': req.params.user_id};
+module.exports.getUserAccounts = function(req, res) {
+        var params = {'user_id': req.params.user_id};
 
-        var query = Account.forge(params).fetch({withRelated: ['users']});
+        var query = Account.forge(params).fetch({withRelated: ['user']});
         var results = query.then(function(datas) {
             res.status(200).json(datas);
         }).catch(function (error) {
@@ -47,11 +47,11 @@ module.exports.postUser = function(req, res) {
     }
     else
     {
-        var datas = req.body;
+        var params = req.body;
 
-        var query = User.forge(datas).save();
-        var results = query.then(function(datas) {
-            res.status(200).json(datas);
+        var query = User.forge(params).save();
+        var results = query.then(function(save) {
+            res.status(200).json(save);
         }).catch(function (error) {
             return res.status(400).json({errorMsg: 'Error while writing', datas: datas});
         });
@@ -60,17 +60,18 @@ module.exports.postUser = function(req, res) {
 
 // ======================= PUT =======================
 module.exports.putUser = function(req, res) {
-    return res.status(200).json('updateUser');
+    var params = req.body;
+    var query = User.forge(params).save();
+    var results = query.then(function(save) {
+        res.status(200).json(save);
+    }).catch(function (error) {
+        return res.status(400).json({errorMsg: 'Error while writing', datas: datas});
+    });
 };
 
 // ======================= DELETE =======================
 module.exports.deleteUser = function (req, res) { 
-    if (!req.params.user_id){
-        res.status(422).json('Missing parameter: user_id');
-    }
-    else
-    {
-    var query = User.forge({id: req.params.user_id})
+    var query = User.forge({'id': req.params.user_id})
         .fetch({require: true})
         .then(function (datas) {
             datas.destroy()
@@ -79,7 +80,6 @@ module.exports.deleteUser = function (req, res) {
     var results= query.then(function (destroy) {
         res.status(200).json({successMsg: 'User deleted'});
     }).catch(function (error) {
-        res.status(500).json({errorMsg: 'Error while deleting data'});
+        res.status(400).json({errorMsg: 'Error while deleting data'});
     });
-}
 };

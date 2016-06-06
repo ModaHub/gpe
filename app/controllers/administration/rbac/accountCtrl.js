@@ -41,13 +41,13 @@ module.exports.getAccount = function(req, res) {
     }
 }
 
-module.exports.getUsersIntoAccount = function(req, res) {
+module.exports.getAccountUsers = function(req, res) {
     if (!req.params.account_id){
         res.status(422).json({errorMsg: 'Missing parameter: account_id'});
     }
     else
     {
-	var model = req.params.cloud_provider + '_accounts';
+        var model = req.params.cloud_provider + '_accounts';
         var params = {'id': req.params.account_id};
 
         var query = orm._models[model].where(params).fetch({withRelated: ['user']});
@@ -70,10 +70,14 @@ module.exports.postAccount = function(req, res) {
     }
     else
     {
-	var model = req.params.cloud_provider + '_accounts';
+        var model = req.params.cloud_provider + '_accounts';
         var params = req.body;
 
-        var query = orm._models[model].forge(params).save();
+        var query = orm._models[model].forge(params)
+            .fetch({require: true})
+            .then(function (datas) {
+                datas.save();
+            });
         var results = query.then(function(save) {
             res.status(200).json(save);
         }).catch(function (error) {
@@ -84,8 +88,20 @@ module.exports.postAccount = function(req, res) {
 
 // ======================= PUT =======================
 module.exports.putAccount = function(req, res) {
-    return res.status(200).json('updateAccount');
-};
+    var model = req.params.cloud_provider + '_accounts';
+    var params = req.body;
+
+    var query = orm._models[model].forge(params)
+        .fetch({require: true})
+        .then(function (datas) {
+            datas.save();
+        });
+    var results = query.then(function(save) {
+        res.status(200).json(save);
+    }).catch(function (error) {
+        return res.status(400).json({errorMsg: 'Error while writing data'});
+    });
+}
 
 // ======================= DELETE =======================
 module.exports.deleteAccount = function (req, res) { 
