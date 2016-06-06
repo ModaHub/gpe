@@ -9,6 +9,8 @@ var requireDir     = require('require-dir');
 var objectFlatten  = require('./app/utils/objectFlatten');
 var routes         = requireDir('./app/routes', {recurse: true});
 var AWS            = require('aws-sdk');
+var orm            = require("./app/models/storage");
+
 // expose app
 exports = module.exports = app;
 
@@ -26,8 +28,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // AWS SDK =================================================
-
 app.set('awsTools', AWS);
+
+// MODELS ==================================================
+var models = orm._models;
+app.set('models', models);
 
 // routes ==================================================
 routes = objectFlatten(routes);

@@ -9,15 +9,39 @@ module.exports = function (app) {
         req.cloud_provider = provider;
         next();
     });
-    app.param('storage_id', function (req, res, next, id) {
-        var model = req.cloud_provider + '_storage';
-        orm._models[model].where({id: id})
+    app.param('container_id', function (req, res, next, container_id) {
+        var model = req.cloud_provider + '_storage_containers';
+
+        req.app.get('models')[model].where({id: container_id})
         .fetch()
-        .then(function (result) {
-            req.storage = result;
+        .then(function (container) {
+            req.container = container;
             next();
-        })
-        .catch(function (error) {
+        }).catch(function (error) {
+            next(error);
+        });
+    });
+    app.param('storage_id', function (req, res, next, storage_id) {
+        var model = req.cloud_provider + '_storages';
+
+        req.app.get('models')[model].where({id: storage_id})
+        .fetch()
+        .then(function (storage) {
+            req.storage = storage;
+            next();
+        }).catch(function (error) {
+            next(error);
+        });
+    });
+    app.param('object_id', function (req, res, next, object_id) {
+        var model = req.cloud_provider + '_storage_objects';
+
+        req.app.get('models')[model].where({id: object_id})
+        .fetch()
+        .then(function (object) {
+            req.object = object;
+            next();
+        }).catch(function (error) {
             next(error);
         });
     });
