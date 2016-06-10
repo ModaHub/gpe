@@ -29,7 +29,7 @@ module.exports.getUser = function(req, res) {
 module.exports.getUserAccounts = function(req, res) {
         var params = {'user_id': req.params.user_id};
 
-        var query = Account.forge(params).fetch({withRelated: ['user']});
+        var query = Account.where(params).fetchAll();
         var results = query.then(function(datas) {
             res.status(200).json(datas);
         }).catch(function (error) {
@@ -61,7 +61,13 @@ module.exports.postUser = function(req, res) {
 // ======================= PUT =======================
 module.exports.putUser = function(req, res) {
     var params = req.body;
-    var query = User.forge(params).save();
+
+    var query = User.forge({'id': req.params.user_id})
+        .fetch({require: true})
+        .then(function (datas) {
+            datas.save(params)
+        });
+
     var results = query.then(function(save) {
         res.status(200).json(save);
     }).catch(function (error) {
