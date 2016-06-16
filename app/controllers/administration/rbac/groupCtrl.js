@@ -28,7 +28,8 @@ module.exports.getGroup = function(req, res) {
 module.exports.getGroupUsers = function(req, res) {
         var params = {'group_id': req.params.group_id};
 
-        var query = User.forge(params).fetch({withRelated: ['group']});
+        var query = User.forge(params).fetch({withRelated: ['groups']});
+
         var results = query.then(function(datas) {
             res.status(200).json(datas);
         }).catch(function (error) {

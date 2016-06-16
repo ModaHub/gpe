@@ -19,6 +19,7 @@ module.exports.getUser = function(req, res) {
         var params = {'id': req.params.user_id};
 
         var query = User.where(params).fetchAll();
+
         var results = query.then(function(datas) {
             res.status(200).json(datas);
         }).catch(function (error) {
@@ -30,6 +31,7 @@ module.exports.getUserAccounts = function(req, res) {
         var params = {'user_id': req.params.user_id};
 
         var query = Account.where(params).fetchAll();
+
         var results = query.then(function(datas) {
             res.status(200).json(datas);
         }).catch(function (error) {
