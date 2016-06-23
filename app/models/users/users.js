@@ -1,8 +1,6 @@
 // cloudAccounts.js
 'use strict';
 
-var Aws_cloud_accounts = require('./awsCloudAccounts');
-
 var Users = orm.Model.extend({
   tableName: 'users',
 

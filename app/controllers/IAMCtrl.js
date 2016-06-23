@@ -7,7 +7,6 @@ module.exports.getIAMUsers = function(req, res) {
     .fetch({withRelated: ['users']})
     .then(function (result) {
         if (null === result) {
-            console.log('coucou');
             return res.status(200).json([]);
         }
         else {
@@ -19,9 +18,9 @@ module.exports.getIAMUsers = function(req, res) {
             var iam = new awsTools.IAM();
             iam.listUsers([], function (error, data) {
                 if (error)
-                    console.log(error, error.stack);
+                    return res.status(400).json(error);
                 else
-                    res.status(200).json(data);
+                    return res.status(200).json(data);
             })
         }
     })
