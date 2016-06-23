@@ -12,6 +12,7 @@ module.exports.getAllStorages = function(req, res) {
         return res.status(400).json(error);
     });
 }
+
 module.exports.getStorages = function(req, res) {
     var Storages = req.app.get('models').storages;
 
@@ -43,7 +44,7 @@ module.exports.getContainers = function (req, res) {
         Containers,
         { cloud_vendor: req.cloud_provider }
     );
-};
+}
 
 module.exports.getContainer = function (req, res) {
     var Containers = req.app.get('models').storage_containers;
@@ -56,7 +57,7 @@ module.exports.getContainer = function (req, res) {
             id: req.container.id
         }
     );
-};
+}
 
 module.exports.getObjects = function (req, res) {
     var Objects = req.app.get('models').storage_objects;
@@ -67,6 +68,7 @@ module.exports.getObjects = function (req, res) {
         { cloud_vendor: req.cloud_provider }
     );
 }
+
 module.exports.getObject = function (req, res) {
     var Objects = req.app.get('models').storage_objects;
 

@@ -1,15 +1,15 @@
 // app/controllers/services/IAMCtrl.js
-var orm            = require("../models/awsCloudAccounts");
-aws_cloud_accounts = orm._models.aws_cloud_accounts;
-
 // ======================= GET =======================
 module.exports.getIAMUsers = function(req, res) {
+    aws_cloud_accounts = req.app.get('models').Aws_cloud_accounts;
     aws_cloud_accounts
-    .where({login: 'bouren_n@etna-alternance.net', type: 'IAM'})
-    .fetch()
+    .forge({login: 'bouren_n@etna-alternance.net', type: 'root'})
+    .fetch({withRelated: ['users']})
     .then(function (result) {
-        if (null === result)
+        if (null === result) {
+            console.log('coucou');
             return res.status(200).json([]);
+        }
         else {
             var awsTools = req.app.get('awsTools');
             awsTools.config.update({

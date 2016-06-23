@@ -9,7 +9,7 @@ var requireDir     = require('require-dir');
 var objectFlatten  = require('./app/utils/objectFlatten');
 var routes         = requireDir('./app/routes', {recurse: true});
 var AWS            = require('aws-sdk');
-var orm            = require("./app/models/storage");
+var orm            = require("./app/models/orm");
 
 // expose app
 exports = module.exports = app;
