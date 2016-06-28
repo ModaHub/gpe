@@ -42,5 +42,5 @@ for (var route in routes) {
 
 // start app ===============================================
 var server = app.listen((8080), function() {
-    console.log('Magic happens on localhost:8080');
+    console.log('Cloodhook started.');
 });
