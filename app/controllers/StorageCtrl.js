@@ -1,83 +1,81 @@
 // app/controllers/services/storage/StorageCtrl.js
-var orm_utils  = require('../../utils/ormUtils.js');
-var arrayUtils = require('../../utils/inArray');
+var orm_utils  = require('../utils/ormUtils.js');
+var arrayUtils = require('../utils/inArray');
 
 // ======================= GET =======================
 module.exports.getAllStorages = function(req, res) {
-    var Storages = req.app.get('models').storages;
+    var QRB = req.app.get('QRB');
 
-    Storages.fetchAll().then(function (storages) {
-        return res.status(200).json(storages);
-    }).catch(function (error) {
-        return res.status(400).json(error);
+    QRB('storages').select()
+    .then(function (datas) {
+        res.status(200).json(datas);
+    })
+    .catch(function(error) {
+        res.status(400).json(error);
     });
 }
-module.exports.getStorages = function(req, res) {
-    var Storages = req.app.get('models').storages;
 
-    orm_utils.getQuery(
-        res,
-        Storages,
-        { cloud_vendor: req.cloud_provider }
-    );
+module.exports.getStorages = function(req, res) {
+    var QRB = req.app.get('QRB');
+
+    QRB('storages').where('cloud_vendor', req.cloud_provider)
+    .select()
+    .then(function (datas) {
+        res.status(200).json(datas);
+    })
+    .catch(function(error) {
+        res.status(400).json(error);
+    });
 }
 
 module.exports.getStorage = function(req, res) {
-    var Storages = req.app.get('models').storages;
+    var storage = req.storage
 
-    orm_utils.getQuery(
-        res,
-        Storages,
-        {
-            cloud_vendor: req.cloud_provider,
-            id: req.storage.id
-        }
-    );
+    return res.status(200).json(storage);
 }
+
 
 module.exports.getContainers = function (req, res) {
-    var Containers = req.app.get('models').storage_containers;
+    var QRB = req.app.get('QRB');
 
-    orm_utils.getQuery(
-        res,
-        Containers,
-        { cloud_vendor: req.cloud_provider }
-    );
-};
+    QRB('storage_containers').where({
+        cloud_vendor: req.cloud_provider,
+        storage_id: req.storage.id
+    })
+    .select()
+    .then(function (datas) {
+        res.status(200).json(datas);
+    })
+    .catch(function(error) {
+        res.status(400).json(error);
+    });
+}
 
 module.exports.getContainer = function (req, res) {
-    var Containers = req.app.get('models').storage_containers;
+    var container = req.container;
 
-    orm_utils.getQuery(
-        res,
-        Containers,
-        {
-            cloud_vendor: req.cloud_provider,
-            id: req.container.id
-        }
-    );
-};
+    return res.status(200).json(container);
+}
 
 module.exports.getObjects = function (req, res) {
-    var Objects = req.app.get('models').storage_objects;
+    var QRB = req.app.get('QRB');
 
-    orm_utils.getQuery(
-        res,
-        Objects,
-        { cloud_vendor: req.cloud_provider }
-    );
+    QRB('storage_objects').where({
+        cloud_vendor: req.cloud_provider,
+        container_id: req.container.id
+    }).select()
+    .then(function (datas) {
+        res.status(200).json(datas);
+    })
+    .catch(function(error) {
+        res.status(400).json(error);
+    });
 }
-module.exports.getObject = function (req, res) {
-    var Objects = req.app.get('models').storage_objects;
 
-    orm_utils.getQuery(
-        res,
-        Objects,
-        {
-            cloud_vendor: req.cloud_provider,
-            id: req.object.id
-        }
-    );
+module.exports.getObject = function (req, res) {
+    var object = req.object;
+
+    res.status(200).json(object);
 }
 
 // ======================= POST =======================

@@ -15,6 +15,7 @@
     "knex": "^0.10.0",
     "method-override": "~2.3.5",
     "morgan": "1.7.x",
+    "pg-native": "*",
     "pg-hstore": "^2.3.2",
     "pg-promise": "~3.1.7",
     "q": "2.0.3",

@@ -9,39 +9,68 @@ module.exports = function (app) {
         req.cloud_provider = provider;
         next();
     });
-    app.param('container_id', function (req, res, next, container_id) {
-        var model = req.cloud_provider + '_storage_containers';
+    app.param('storage_id', function (req, res, next, storage_id) {
+        var QRB   = req.app.get('QRB');
 
-        req.app.get('models')[model].where({id: container_id})
-        .fetch()
-        .then(function (container) {
-            req.container = container;
+        QRB('storages').where({
+            cloud_vendor: req.cloud_provider,
+            id: storage_id
+        })
+        .select()
+        .first()
+        .then(function (storage) {
+            if (storage) {
+                req.storage = storage;
+            } else {
+                return res.status(404).json('Storage not Found');
+            }
             next();
-        }).catch(function (error) {
-            next(error);
+        })
+        .catch(function(error) {
+            return res.status(400).json(error);
         });
     });
-    app.param('storage_id', function (req, res, next, storage_id) {
-        var model = req.cloud_provider + '_storages';
+    app.param('container_id', function (req, res, next, container_id) {
+        var QRB   = req.app.get('QRB');
 
-        req.app.get('models')[model].where({id: storage_id})
-        .fetch()
-        .then(function (storage) {
-            req.storage = storage;
+        QRB('storage_containers').where({
+            cloud_vendor: req.cloud_provider,
+            storage_id: req.storage.id,
+            id: container_id
+        })
+        .select()
+        .first()
+        .then(function (container) {
+            if (container) {
+                req.container = container;
+            } else {
+                return res.status(404).json('Container not Found');
+            }
             next();
-        }).catch(function (error) {
+        })
+        .catch(function(error) {
             next(error);
         });
     });
     app.param('object_id', function (req, res, next, object_id) {
-        var model = req.cloud_provider + '_storage_objects';
+        var QRB   = req.app.get('QRB');
 
-        req.app.get('models')[model].where({id: object_id})
-        .fetch()
+        QRB('storage_objects').where({
+            cloud_vendor: req.cloud_provider,
+            container_id: req.container.id,
+            id: object_id
+        })
+        .select()
+        .first()
         .then(function (object) {
-            req.object = object;
+            if (object) {
+                req.object = object;
+            } else {
+                return res.status(404).json('Object not Found');
+            }
             next();
-        }).catch(function (error) {
+        })
+        .catch(function(error) {
             next(error);
         });
     });
