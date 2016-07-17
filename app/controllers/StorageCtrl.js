@@ -34,7 +34,6 @@ module.exports.getStorage = function(req, res) {
     return res.status(200).json(storage);
 }
 
-
 module.exports.getContainers = function (req, res) {
     var QRB = req.app.get('QRB');
 
@@ -80,34 +79,30 @@ module.exports.getObject = function (req, res) {
 
 // ======================= POST =======================
 module.exports.postStorage = function(req, res) {
-    var Storages = req.app.get('models')[req.cloud_provider + '_storage'];
+    var QRB   = req.app.get('QRB');
+    var table = req.cloud_provider + '_storages';
 
     if (typeof req.body.name !== 'string' || isNaN(Number(req.body.account_id))) {
         return res.status(400).json('Bad request');
     }
 
     var datas = {
-        name:        req.body.name,
-        description: req.body.description || '',
+        name:           req.body.name,
+        description:    req.body.description || '',
+        aws_account_id: req.body.account_id
     };
 
-    switch (req.cloud_provider) {
-        case 'azr':
-            datas['azr_storage_account_id'] = req.body.account_id;
-            break;
-        case 'aws':
-            datas['aws_cloud_account_id'] = req.body.account_id;
-            break;
-        default:
-            return res.status(400).json('Cloud provider not handled');
-    }
-
-    Storages.forge(datas)
-    .save()
-    .then(function (save) {
-        return res.status(200).json(save);
-    }).catch(function (error) {
-        return res.status(400).json({errorMsg: 'Error while writing', datas: datas});
+    QRB.returning('*')
+    .insert(datas)
+    .into(table)
+    .then(function (storage) {
+        return res.status(201).json(storage);
+    })
+    .catch(function(error) {
+        return res.status(400).json({
+            msg:   "Error when writing datas",
+            error: error
+        });
     });
 }
 
@@ -126,15 +121,6 @@ module.exports.postContainer = function (req, res) {
 
     if (isNaN(Number(req.body.size))) {
         return res.status(400).json('Size is not a number');
-    }
-
-    if (typeof req.body.creation_date === 'undefined') {
-        return res.status(400).json('No creation_date');
-    }
-
-    date = new Date(req.body.creation_date);
-    if (date.toUTCString() === 'Invalid Date') {
-        return res.status(400).json('Bad creation_date')
     }
 
     if (typeof req.body.acl === 'undefined') {
@@ -165,27 +151,44 @@ module.exports.postContainer = function (req, res) {
         return res.status(400).json('Storace class ' + req.body.storage_class + ' not handled');
     }
 
+    var date = new Date();
+    if (date.toUTCString() === 'Invalid Date') {
+        return res.status(400).json('Bad creation_date')
+    }
+
     if (typeof req.body.expect === 'undefined' &&
         typeof req.body.request_payment === 'undefined' &&
         typeof req.body.versionning === 'undefined') {
         return res.status(400).json('Missing fields');
     }
 
-    var Containers = req.app.get('models')[req.cloud_provider + '_storage_containers'];
-    var datas = req.body;
+    var QRB   = req.app.get('QRB');
+    var table = req.cloud_provider + '_storage_containers';
+    var datas = {
+        name:            req.body.name,
+        description:     req.body.description || '',
+        creation_date:   date,
+        acl:             req.body.acl,
+        storage_class:   req.body.storage_class.toUpperCase(),
+        region:          req.body.region,
+        size:            req.body.size,
+        expect:          req.body.expect != false,
+        request_payment: req.body.request_payment != false,
+        versionning:     req.body.versionning != false,
+        storage_id:      req.storage.id
+    }
 
-    datas.creation_date   = date;
-    datas.storage_class   = datas.storage_class.toUpperCase();
-    datas.expect          = datas.expect != false;
-    datas.request_payment = datas.request_payment != false;
-    datas.versionning     = datas.versionning != false;
-    datas.storage_id      = req.storage.id;
-
-    Containers.forge(datas).save().then(function (save) {
-        return res.status(200).json(save);
-    }).catch(function (error) {
-        console.log(error);
-        return res.status(400).json({errorMsg:'Error while writing', datas: datas});
+    QRB.returning('*')
+    .insert(datas)
+    .into(table)
+    .then(function (container) {
+        return res.status(201).json(container);
+    })
+    .catch(function(error) {
+        return res.status(400).json({
+            msg:   "Error when writing datas",
+            error: error
+        });
     });
 };
 
@@ -232,70 +235,117 @@ module.exports.postObject = function (req, res) {
         return res.status(400).json('Object_ub is not a number');
     }
 
-    var Objects = req.app.get('models')[req.cloud_provider + '_storage_objects'];
+    var QRB   = req.app.get('QRB');
+    var table = req.cloud_provider + '_storage_objects';
     var datas = req.body;
 
     datas.container_id  = req.container.id;
     datas.storage_class = datas.storage_class.toUpperCase();
 
-    Objects.forge(datas).save().then(function (save) {
-        return res.status(200).json(save);
-    }).catch(function (error) {
-        console.log(error);
-        return res.status(400).json({errorMsg:'Error while writing', datas: datas});
+    QRB.returning('*')
+    .insert(datas)
+    .into(table)
+    .then(function (object) {
+        return res.status(201).json(object);
     })
+    .catch(function(error) {
+        return res.status(400).json({
+            msg:   "Error when writing datas",
+            error: error
+        });
+    });
 };
 
 
 // ======================= PUT =======================
 module.exports.putStorage = function(req, res) {
-    var storage = req.storage;
+    var QRB   = req.app.get('QRB');
+    var table = req.cloud_provider + '_storages';
 
-    storage.save(req.body).then(function (save) {
-        return res.status(200).json(save);
-    }).catch(function (error) {
-        return res.status(400).json({ errorMsg: 'Error while updating storage', datas: req.body });
+    QRB(table).returning('*')
+    .where('id', req.storage.id)
+    .update(req.body)
+    .then(function (storage) {
+        return res.status(201).json(storage);
+    })
+    .catch(function (error) {
+        return res.status(400).json({
+            msg:   "Error when writing datas",
+            error: error
+        });
     })
 }
 
 module.exports.putContainer = function (req, res) {
-    var container = req.container;
+    var QRB   = req.app.get('QRB');
+    var table = req.cloud_provider + '_storage_containers';
 
-    container.save(req.body).then(function (save) {
-        return res.status(200).json(save);
-    }).catch(function (error) {
-        return res.status(400).json({ errorMsg: 'Error while updating container', datas: req.body });
-    });
+    QRB(table).returning('*')
+    .where('id', req.container.id)
+    .update(req.body)
+    .then(function (container) {
+        return res.status(201).json(container);
+    })
+    .catch(function (error) {
+        return res.status(400).json({
+            msg:   "Error when writing datas",
+            error: error
+        });
+    })
 };
 
 module.exports.putObject = function (req, res) {
-    var object = req.object;
+    var QRB   = req.app.get('QRB');
+    var table = req.cloud_provider + '_storage_objects';
 
-    object.save(req.body).then(function (save) {
-        return res.status(200).json(save);
-    }).catch(function (error) {
-        return res.status(400).json({ errorMsg: 'Error while updating object', datas: req.body });
+    QRB(table).returning('*')
+    .where('id', req.object.id)
+    .update(req.body)
+    .then(function (object) {
+        return res.status(201).json(object);
+    })
+    .catch(function (error) {
+        return res.status(400).json({
+            msg:   "Error when writing datas",
+            error: error
+        });
     })
 };
 
 
 // ======================= DELETE =======================
 module.exports.deleteContainer = function (req, res) {
-    var container = req.container;
+    var QRB   = req.app.get('QRB');
+    var table = req.cloud_provider + '_storage_containers';
 
-    container.destroy().then(function (result) {
-        return res.status(200).json("Deleted");
-    }).catch(function (error) {
-        return res.status(400).json({ errorMsg:'Error while deleting container', datas: container })
-    });
+    QRB(table)
+    .where('id', req.container.id)
+    .del()
+    .then(function (container) {
+        return res.status(201).json(container + ' rows affected');
+    })
+    .catch(function (error) {
+        return res.status(400).json({
+            msg:   "Error when writing datas",
+            error: error
+        });
+    })
 };
 
 module.exports.deleteObject = function (req, res) {
-    var object = req.object;
+    var QRB   = req.app.get('QRB');
+    var table = req.cloud_provider + '_storage_objects';
 
-    object.destroy().then(function (result) {
-        return res.status(200).json("Deleted");
-    }).catch(function (error) {
-        return res.status(400).json({ errorMsg: 'Error while deleting object', datas: object });
-    });
+    QRB(table)
+    .where('id', req.object.id)
+    .del()
+    .then(function (object) {
+        return res.status(201).json(object + ' row affected');
+    })
+    .catch(function (error) {
+        return res.status(400).json({
+            msg:   "Error when writing datas",
+            error: error
+        });
+    })
 };

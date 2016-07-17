@@ -4,7 +4,7 @@ var orm        = require("../../models/storage");
 module.exports = function (app) {
     app.param('cloud_provider', function (req, res, next, provider) {
         if (false === arrayUtils.inArray(provider, ['aws', 'azr'])) {
-            return res.status(400).json("Bad request");
+            return res.status(400).json('Cloud provider not handled');
         }
         req.cloud_provider = provider;
         next();
