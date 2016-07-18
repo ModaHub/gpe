@@ -13,8 +13,6 @@ var AWS            	= require('aws-sdk');
 var env    		   	= process.env.NODE_ENV || 'development';
 var config 		   	= require('./config/' + env);
 
-var orm            	= require("./app/models/orm");
-
 
 // expose app
 exports = module.exports = app;
@@ -39,10 +37,6 @@ app.set('awsTools', AWS);
 
 var knex = require('knex')(config.db);
 app.set("QRB", knex);
-
-// MODELS ==================================================
-var models = orm._models;
-app.set('models', models);
 
 // routes ==================================================
 routes = objectFlatten(routes);

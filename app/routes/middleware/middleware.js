@@ -1,5 +1,4 @@
 var arrayUtils = require('../../utils/inArray');
-var orm        = require("../../models/storage");
 
 module.exports = function (app) {
     app.param('cloud_provider', function (req, res, next, provider) {

@@ -1,5 +1,4 @@
 // app/controllers/services/storage/StorageCtrl.js
-var orm_utils  = require('../utils/ormUtils.js');
 var arrayUtils = require('../utils/inArray');
 
 // ======================= GET =======================
