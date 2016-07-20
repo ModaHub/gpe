@@ -1,15 +1,18 @@
 // server.js
 
 // modules =================================================
-var express        = require('express');
-var app            = express();
-var bodyParser     = require('body-parser');
-var methodOverride = require('method-override');
-var requireDir     = require('require-dir');
-var objectFlatten  = require('./app/utils/objectFlatten');
-var routes         = requireDir('./app/routes', {recurse: true});
-var AWS            = require('aws-sdk');
-var orm            = require("./app/models/storage");
+var express        	= require('express');
+var app            	= express();
+var bodyParser     	= require('body-parser');
+var methodOverride 	= require('method-override');
+var requireDir     	= require('require-dir');
+var objectFlatten  	= require('./app/utils/objectFlatten');
+var routes         	= requireDir('./app/routes', {recurse: true});
+var AWS            	= require('aws-sdk');
+
+var env    		   	= process.env.NODE_ENV || 'development';
+var config 		   	= require('./config/' + env);
+
 
 // expose app
 exports = module.exports = app;
@@ -30,9 +33,10 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // AWS SDK =================================================
 app.set('awsTools', AWS);
 
-// MODELS ==================================================
-var models = orm._models;
-app.set('models', models);
+// Knex query builder ======================================
+
+var knex = require('knex')(config.db);
+app.set("QRB", knex);
 
 // routes ==================================================
 routes = objectFlatten(routes);
