@@ -1,8 +1,4 @@
 // app/controllers/administration/rbac/groupCtrl.js
-var orm        = require('../../../models/rbac');
-var Group      = orm._models.groups;
-var User       = orm._models.users;
-
 // ======================= GET =======================
 module.exports.getGroups = function(req, res) {
     var query = Group.fetchAll();
@@ -67,7 +63,7 @@ module.exports.putGroup = function(req, res) {
 };
 
 // ======================= DELETE =======================
-module.exports.deleteGroup = function (req, res) { 
+module.exports.deleteGroup = function (req, res) {
     var query = Group.forge({'id': req.params.group_id})
         .fetch({require: true})
         .then(function (datas) {

@@ -1,9 +1,4 @@
 // app/controllers/administration/rbac/resourceCtrl.js
-var bcrypt     = require('bcrypt');
-var orm        = require('../../../models/rbac');
-var Resource   = orm._models.resources;
-var Permission = orm._models.permissions;
-
 // ======================= GET =======================
 module.exports.getResources = function(req, res) {
     var query = Resource.fetchAll();
@@ -76,7 +71,7 @@ module.exports.putResource = function(req, res) {
 };
 
 // ======================= DELETE =======================
-module.exports.deleteResource = function (req, res) { 
+module.exports.deleteResource = function (req, res) {
     if (!req.params.resource_id){
         res.status(422).json('Missing parameter: resource_id');
     }

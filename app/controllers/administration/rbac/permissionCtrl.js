@@ -1,9 +1,4 @@
 // app/controllers/administration/rbac/permissionCtrl.js
-var orm        = require("../../../models/rbac");
-var orm_utils  = require('../../../utils/ormUtils.js');
-var arrayUtils = require('../../../utils/inArray');
-var Permission    = orm._models.permissions;
-
 // ======================= GET =======================
 module.exports.getPermissions = function(req, res) {
     orm_utils.getQuery(

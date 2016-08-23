@@ -1,9 +1,4 @@
 // app/controllers/administration/rbac/userCtrl.js
-var bcrypt     = require('bcrypt');
-var orm        = require('../../../models/rbac');
-var User       = orm._models.users;
-var Account    = orm._models.accounts;
-
 // ======================= GET =======================
 module.exports.getUsers = function(req, res) {
     var query = User.fetchAll();
@@ -78,7 +73,7 @@ module.exports.putUser = function(req, res) {
 };
 
 // ======================= DELETE =======================
-module.exports.deleteUser = function (req, res) { 
+module.exports.deleteUser = function (req, res) {
     var query = User.forge({'id': req.params.user_id})
         .fetch({require: true})
         .then(function (datas) {

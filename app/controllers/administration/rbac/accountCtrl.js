@@ -1,9 +1,4 @@
 // app/controllers/administration/rbac/accountCtrl.js
-var bcrypt     = require('bcrypt');
-var orm        = require('../../../models/rbac');
-var Account    = orm._models.accounts;
-var User       = orm._models.users;
-
 // ======================= GET =======================
 module.exports.getAccounts = function(req, res) {
     if (!req.params.cloud_provider){
@@ -103,7 +98,7 @@ module.exports.putAccount = function(req, res) {
 }
 
 // ======================= DELETE =======================
-module.exports.deleteAccount = function (req, res) { 
+module.exports.deleteAccount = function (req, res) {
     var model = req.params.cloud_provider + '_accounts';
     var params = {'id': req.params.account_id};
 

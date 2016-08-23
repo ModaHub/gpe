@@ -1,5 +1,5 @@
-// app/controllers/services/storage/StorageCtrl.js
-var arrayUtils = require('../utils/inArray');
+// app/controllers/services/storage/storageCtrl.js
+var arrayUtils = require('../../../utils/inArray');
 
 // ======================= GET =======================
 module.exports.getAllStorages = function(req, res) {
