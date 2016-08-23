@@ -7,9 +7,9 @@ module.exports = {
     	debug: true,
 	    connection: {
 		    port: "5432",
-	    	host: "37.59.60.163",
-		    user: "root",
-		    password: "etna42",
+	    	host: "127.0.0.1",
+		    user: "Hassan",
+		    password: "",
 		    database: "development"
 	 	}
 	}
