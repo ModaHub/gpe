@@ -10,9 +10,8 @@ var objectFlatten  	= require('./app/utils/objectFlatten');
 var routes         	= requireDir('./app/routes', {recurse: true});
 var AWS            	= require('aws-sdk');
 
-var env    		   	= process.env.NODE_ENV || 'development';
+var env    		   	= process.env.NODE_ENV || 'cloudhook';
 var config 		   	= require('./config/' + env);
-
 
 // expose app
 exports = module.exports = app;
@@ -34,7 +33,6 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.set('awsTools', AWS);
 
 // Knex query builder ======================================
-
 var knex = require('knex')(config.db);
 app.set("QRB", knex);
 
@@ -46,5 +44,5 @@ for (var route in routes) {
 
 // start app ===============================================
 var server = app.listen((8080), function() {
-    console.log('Magic happens on localhost:8080');
+    console.log('Cloodhook started.');
 });

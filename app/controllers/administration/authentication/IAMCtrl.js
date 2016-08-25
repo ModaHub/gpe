@@ -1,4 +1,4 @@
-// app/controllers/services/IAMCtrl.js
+// app/controllers/administration/authentication/IAMCtrl.js
 // ======================= GET =======================
 module.exports.getIAMUsers = function(req, res) {
     var QRB = req.app.get('QRB');

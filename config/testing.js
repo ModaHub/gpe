@@ -1,8 +1,5 @@
 // config/testing.js
-var os = require('os');
-
 module.exports = {
-    hostname: os.hostname(),
     ip: 'localhost',
     db_url: "postgresql://root:etna42@37.59.60.163:5432/testing",
     db : {
