@@ -1,116 +1,159 @@
 // app/controllers/administration/rbac/accountCtrl.js
 // ======================= GET =======================
+module.exports.getAllAccounts = function(req, res) {
+  var QRB = req.app.get('QRB');
+
+  QRB('accounts')
+  .select('*')
+  .then(function (datas) {
+    res.status(200).json(datas);
+  })
+  .catch(function(error) {
+    res.status(400).json(error);
+  });
+}
+
 module.exports.getAccounts = function(req, res) {
-    if (!req.params.cloud_provider){
-    	var query = Account.fetchAll();
-    }
-    else
-    {
-    	var query = Account.where({'cloud_vendor': req.params.cloud_provider}).fetchAll();
-    }
-    var results = query.then(function (datas) {
-        res.status(200).json(datas);
-    }).catch(function (error) {
-        return res.status(400).json({errorMsg: 'Error while retrieving datas'});
-    });
+  var QRB = req.app.get('QRB');
+
+  QRB('accounts')
+  .where('cloud_vendor', req.cloud_vendor)
+  .select('*')
+  .then(function (datas) {
+    res.status(200).json(datas);
+  })
+  .catch(function(error) {
+    res.status(400).json(error);
+  });
 }
 
 module.exports.getAccount = function(req, res) {
-    if (!req.params.account_id){
-        res.status(422).json({errorMsg: 'Missing parameter: account_id'});
-    }
-    else if (!req.params.cloud_provider)
-    {
-        res.status(422).json({errorMsg: 'Missing parameter: cloud_provider'});
-    }
-    else
-    {
-        var params = {'id': req.params.account_id, 'cloud_vendor': req.params.cloud_provider};
+  var QRB = req.app.get('QRB');
 
-        var query = Account.where(params).fetchAll();
-
-        var results = query.then(function(datas) {
-            res.status(200).json(datas);
-        }).catch(function (error) {
-            return res.status(400).json({errorMsg: 'Error while retrieving datas'});
-        });
-    }
+  QRB('accounts')
+  .select('*')
+  .where({
+    'id': req.params.account_id,
+    'cloud_vendor': req.params.cloud_vendor
+  })
+  .then(function (datas) {
+    res.status(200).json(datas);
+  })
+  .catch(function(error) {
+    res.status(400).json(error);
+  });
 }
 
 module.exports.getAccountUsers = function(req, res) {
-    var params = {'id': req.params.account_id};
+  var QRB = req.app.get('QRB');
 
-    var query = Account.forge(params).fetch({withRelated: ['users']})
-
-    var results = query.then(function(account) {
-        var users = account.related('users');
-        res.json({error: false, data: users.toJSON()});
-//        res.status(200).json(datas);
-    }).catch(function (error) {
-        return res.status(400).json({errorMsg: 'Error while retrieving datas'});
-    });
-}
+  QRB('users')
+  .select('users.*')
+  .leftJoin('accounts', 'users.id', 'accounts.user_id')
+  .where({
+    'accounts.id': req.params.account_id,
+    'accounts.cloud_vendor': req.cloud_vendor
+  })
+  .then(function (datas) {
+    res.status(200).json(datas);
+  })
+  .catch(function(error) {
+    res.status(400).json(error);
+  });
+};
 
 // ======================= POST =======================
 module.exports.postAccount = function(req, res) {
-    if (!req.body.login){
-        res.status(422).json('Missing parameter: login');
-    }
-    else if (!req.body.password)
-    {
-        res.status(422).json('Missing parameter: password');
-    }
-    else
-    {
-        var model = req.params.cloud_provider + '_accounts';
-        var params = req.body;
+  var QRB   = req.app.get('QRB');
+  var table = req.params.cloud_vendor + '_accounts';
 
-        var query = orm._models[model].forge(params)
-            .fetch({require: true})
-            .then(function (datas) {
-                datas.save();
-            });
+  if (req.params.cloud_vendor !== 'aws') {
+    return res.status(200).json('Not handled');
+  }
 
-        var results = query.then(function(save) {
-            res.status(200).json(save);
-        }).catch(function (error) {
-            return res.status(400).json({errorMsg: 'Error while writing data'});
-        });
-    }
+  if (typeof req.body.login !== 'string') {
+    return res.status(400).json('Bad login');
+  }
+
+  if (typeof req.body.password === 'undefined') {
+    return res.status(400).json('No password');
+  }
+
+  if (typeof req.body.aws_access_key_id === 'undefined') {
+    return res.status(400).json('No Access Key');
+  }
+
+  if (typeof req.body.aws_secret_access_key_id === 'undefined') {
+    return res.status(400).json('No Secret Access Key');
+  }
+
+  if (typeof req.body.aws_account_id === 'undefined') {
+    return res.status(400).json('No Account ID');
+  }
+
+  if (typeof req.body.aws_canonical_user_id === 'undefined') {
+    return res.status(400).json('No Canonical User ID');
+  }
+
+  var datas = {
+    login: req.body.login,
+    password: req.body.password,
+    type: req.body.type,
+    aws_access_key_id: req.body.aws_access_key_id,
+    aws_secret_access_key_id: req.body.aws_secret_access_key_id,
+    aws_account_id: req.body.aws_account_id,
+    aws_canonical_user_id: req.body.aws_canonical_user_id,
+    user_id: req.body.user_id
+  };
+
+  QRB.returning('*')
+  .insert(datas)
+  .into(table)
+  .then(function (account) {
+    return res.status(201).json(account);
+  })
+  .catch(function(error) {
+    return res.status(400).json({
+      msg: "Error when writing datas",
+      error: error
+    });
+  });
 }
 
 // ======================= PUT =======================
 module.exports.putAccount = function(req, res) {
-    var model = req.params.cloud_provider + '_accounts';
-    var params = req.body;
+  var QRB   = req.app.get('QRB');
+  var table = req.cloud_vendor + '_accounts';
 
-    var query = orm._models[model].forge({'id': req.params.account_id})
-        .fetch({require: true})
-        .then(function (datas) {
-            datas.save(params);
-        });
-
-    var results = query.then(function(save) {
-        res.status(200).json(save);
-    }).catch(function (error) {
-        return res.status(400).json({errorMsg: 'Error while writing data'});
+  QRB(table).returning('*')
+  .where('id', req.params.group_id)
+  .update(req.body)
+  .then(function (account) {
+    return res.status(201).json(account);
+  })
+  .catch(function (error) {
+    return res.status(400).json({
+      msg: "Error when writing datas",
+      error: error
     });
+  })
 }
 
 // ======================= DELETE =======================
 module.exports.deleteAccount = function (req, res) {
-    var model = req.params.cloud_provider + '_accounts';
-    var params = {'id': req.params.account_id};
+  var QRB   = req.app.get('QRB');
+  var table = req.cloud_vendor + '_accounts';
 
-    var query = orm._models[model].forge(params)
-        .fetch({require: true})
-        .then(function (datas) {
-            datas.destroy()
-        });
-
-    var results= query.then(function (destroy) {
-        res.status(200).json({successMsg: 'Account deleted'});
-    }).catch(function (error) {
-        res.status(500).json({errorMsg: 'Error while deleting data', datas: datas});
+  QRB(table)
+  .where('id', req.params.group_id)
+  .del()
+  .then(function (account) {
+    return res.status(201).json(account + ' rows affected');
+  })
+  .catch(function (error) {
+    return res.status(400).json({
+      msg: "Error when writing datas",
+      error: error
     });
+  })
 };

@@ -17,7 +17,7 @@ module.exports.getAllStorages = function(req, res) {
 module.exports.getStorages = function(req, res) {
     var QRB = req.app.get('QRB');
 
-    QRB('storages').where('cloud_vendor', req.cloud_provider)
+    QRB('storages').where('cloud_vendor', req.cloud_vendor)
     .select()
     .then(function (datas) {
         res.status(200).json(datas);
@@ -37,7 +37,7 @@ module.exports.getContainers = function (req, res) {
     var QRB = req.app.get('QRB');
 
     QRB('storage_containers').where({
-        cloud_vendor: req.cloud_provider,
+        cloud_vendor: req.cloud_vendor,
         storage_id: req.storage.id
     })
     .select()
@@ -59,7 +59,7 @@ module.exports.getObjects = function (req, res) {
     var QRB = req.app.get('QRB');
 
     QRB('storage_objects').where({
-        cloud_vendor: req.cloud_provider,
+        cloud_vendor: req.cloud_vendor,
         container_id: req.container.id
     }).select()
     .then(function (datas) {
@@ -79,7 +79,7 @@ module.exports.getObject = function (req, res) {
 // ======================= POST =======================
 module.exports.postStorage = function(req, res) {
     var QRB   = req.app.get('QRB');
-    var table = req.cloud_provider + '_storages';
+    var table = req.cloud_vendor + '_storages';
 
     if (typeof req.body.name !== 'string' || isNaN(Number(req.body.account_id))) {
         return res.status(400).json('Bad request');
@@ -106,7 +106,7 @@ module.exports.postStorage = function(req, res) {
 }
 
 module.exports.postContainer = function (req, res) {
-    if (req.cloud_provider !== 'aws') {
+    if (req.cloud_vendor !== 'aws') {
         return res.status(200).json('Not handled');
     }
 
@@ -162,7 +162,7 @@ module.exports.postContainer = function (req, res) {
     }
 
     var QRB   = req.app.get('QRB');
-    var table = req.cloud_provider + '_storage_containers';
+    var table = req.cloud_vendor + '_storage_containers';
     var datas = {
         name:            req.body.name,
         description:     req.body.description || '',
@@ -192,7 +192,7 @@ module.exports.postContainer = function (req, res) {
 };
 
 module.exports.postObject = function (req, res) {
-    if (req.cloud_provider !== 'aws') {
+    if (req.cloud_vendor !== 'aws') {
         return res.status(200).json('Not handled');
     }
 
@@ -235,7 +235,7 @@ module.exports.postObject = function (req, res) {
     }
 
     var QRB   = req.app.get('QRB');
-    var table = req.cloud_provider + '_storage_objects';
+    var table = req.cloud_vendor + '_storage_objects';
     var datas = req.body;
 
     datas.container_id  = req.container.id;
@@ -259,7 +259,7 @@ module.exports.postObject = function (req, res) {
 // ======================= PUT =======================
 module.exports.putStorage = function(req, res) {
     var QRB   = req.app.get('QRB');
-    var table = req.cloud_provider + '_storages';
+    var table = req.cloud_vendor + '_storages';
 
     QRB(table).returning('*')
     .where('id', req.storage.id)
@@ -277,7 +277,7 @@ module.exports.putStorage = function(req, res) {
 
 module.exports.putContainer = function (req, res) {
     var QRB   = req.app.get('QRB');
-    var table = req.cloud_provider + '_storage_containers';
+    var table = req.cloud_vendor + '_storage_containers';
 
     QRB(table).returning('*')
     .where('id', req.container.id)
@@ -295,7 +295,7 @@ module.exports.putContainer = function (req, res) {
 
 module.exports.putObject = function (req, res) {
     var QRB   = req.app.get('QRB');
-    var table = req.cloud_provider + '_storage_objects';
+    var table = req.cloud_vendor + '_storage_objects';
 
     QRB(table).returning('*')
     .where('id', req.object.id)
@@ -315,7 +315,7 @@ module.exports.putObject = function (req, res) {
 // ======================= DELETE =======================
 module.exports.deleteContainer = function (req, res) {
     var QRB   = req.app.get('QRB');
-    var table = req.cloud_provider + '_storage_containers';
+    var table = req.cloud_vendor + '_storage_containers';
 
     QRB(table)
     .where('id', req.container.id)
@@ -333,7 +333,7 @@ module.exports.deleteContainer = function (req, res) {
 
 module.exports.deleteObject = function (req, res) {
     var QRB   = req.app.get('QRB');
-    var table = req.cloud_provider + '_storage_objects';
+    var table = req.cloud_vendor + '_storage_objects';
 
     QRB(table)
     .where('id', req.object.id)
