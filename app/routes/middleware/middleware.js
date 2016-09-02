@@ -1,11 +1,11 @@
 var arrayUtils = require('../../utils/inArray');
 
 module.exports = function (app) {
-    app.param('cloud_vendor', function (req, res, next, provider) {
-        if (false === arrayUtils.inArray(provider, ['aws', 'azr'])) {
-            return res.status(400).json('Cloud provider not handled');
+    app.param('cloud_vendor', function (req, res, next, vendor) {
+        if (false === arrayUtils.inArray(vendor, ['aws', 'azr'])) {
+            return res.status(400).json('Cloud vendor not handled');
         }
-        req.cloud_vendor = provider;
+        req.cloud_vendor = vendor;
         next();
     });
     app.param('storage_id', function (req, res, next, storage_id) {

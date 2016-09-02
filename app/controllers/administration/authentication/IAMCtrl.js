@@ -2,6 +2,7 @@
 // ======================= GET =======================
 module.exports.getIAMUsers = function(req, res) {
     var QRB = req.app.get('QRB');
+    var awsTools = req.app.get('awsTools');
 
     QRB('aws_accounts')
     .where({
@@ -14,7 +15,6 @@ module.exports.getIAMUsers = function(req, res) {
         if (null === datas)
             return res.status(200).json([]);
         else {
-            var awsTools = req.app.get('awsTools');
             awsTools.config.update({
                 accessKeyId:     datas.aws_access_key_id,
                 secretAccessKey: datas.aws_secret_access_key_id

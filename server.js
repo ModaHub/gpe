@@ -10,8 +10,10 @@ var objectFlatten  	= require('./app/utils/objectFlatten');
 var routes         	= requireDir('./app/routes', {recurse: true});
 var AWS            	= require('aws-sdk');
 
-var env    		   	= process.env.NODE_ENV || 'cloudhook';
-var config 		   	= require('./config/' + env);
+var env             = process.env.NODE_ENV || 'cloudhook';
+var config          = require('./config/' + env);
+var knex            = require('knex')(config.db);
+
 
 // expose app
 exports = module.exports = app;
@@ -33,7 +35,6 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.set('awsTools', AWS);
 
 // Knex query builder ======================================
-var knex = require('knex')(config.db);
 app.set("QRB", knex);
 
 // routes ==================================================
