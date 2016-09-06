@@ -5,6 +5,7 @@ var bucketUtils = require('../../../utils/bucketUtils.js');
 // ======================= GET =======================
 module.exports.syncAWSContainers = function(req, res) {
     var QRB       = req.app.get('QRB');
+    var Q         = req.app.get('Q');
     var awsTools  = req.app.get('awsTools');
 
     QRB('accounts')
@@ -18,42 +19,59 @@ module.exports.syncAWSContainers = function(req, res) {
         if (null === datas) {
           return res.status(200).json([]);
         }
-        else {
-            awsTools.config.update({
-                accessKeyId:     datas.aws_access_key_id,
-                secretAccessKey: datas.aws_secret_access_key_id
-            });
-            var s3      = new awsTools.S3({signatureVersion: 'v4'});
-            var buckets = new Array();
+        awsTools.config.update({
+            accessKeyId:     datas.aws_access_key_id,
+            secretAccessKey: datas.aws_secret_access_key_id
+        });
+        var S3 = new awsTools.S3({signatureVersion: 'v4'});
 
-            s3.listBuckets(function(err, data) {
-                if (err) {
-                    return res.status(500).json({
-                        s3:   'listBuckets',
-                        code: err.codeStatus,
-                        msg:  err.message,
-                    });
-                }
-                buckets = bucketUtils.formatBuckets(s3, data.Buckets, req, res);
+        bucket_list = Q.ninvoke(S3, 'listBuckets', '');
 
-                return res.status(200).json(buckets);
-                QRB.returning('*')
-                .insert(buckets)
-                .into('aws_storage_containers')
-                .then(function (container) {
-                    return res.status(201).json(container);
+        bucket_list.then(function (result) {
+            for (var bucket of result.Buckets) {
+                param = {
+                    'Bucket': bucket.Name
+                };
+                bucket_location           = Q.ninvoke(S3, 'getBucketLocation', param);
+                bucket_versionning        = Q.ninvoke(S3, 'getBucketVersioning', param);
+                bucket_request_payment    = Q.ninvoke(S3, 'getBucketRequestPayment', param);
+                // bucket_logging_conf       = Q.ninvoke(S3, 'getBucketLogging', param);
+                // bucket_policy             = Q.ninvoke(S3, 'getBucketPolicy', param);
+                // bucket_acl                = Q.ninvoke(S3, 'getBucketAcl', param); A voir avec Nabil
+                // bucket_life_cycle_conf    = Q.ninvoke(S3, 'getBucketLifecycleConfiguration', param);
+                // bucket_nottification_conf = Q.ninvoke(S3, 'getBucketNotificationConfiguration', param);
+
+                BucketPromised = Q.all([
+                    bucket_location,
+                    bucket_versionning,
+                    bucket_request_payment
+                ]);
+
+                BucketPromised
+                .spread(function (location, versionning, request_payment) {
+                    var Bucket = {
+                        name:            bucket.Name,
+                        creation_date:   bucket.CreationDate,
+                        description:     '',
+                        request_payment: request_payment,
+                        versionning:     versionning
+                        // storage_class:   'STANDARD_IA',
+                        // region:          '',
+                        // size:            '0',
+                        // expect:          '1',
+                        // storage_id:      req.storage.id
+                    };
+                    res.status(200).json(Bucket);
+                }).catch(function (error) {
+                    res.status(500).json(error)
                 })
-                .catch(function (error) {
-                    return res.status(400).json({
-                        msg:   "Error when writing datas",
-                        error: error
-                    });
-                });
-            });
-        }
+            }
+
+        })
+
     })
     .catch(function(error) {
-    res.status(400).json(error);
+        res.status(400).json(error);
     });
 }
 

@@ -4,6 +4,7 @@
 var express        	= require('express');
 var app            	= express();
 var bodyParser     	= require('body-parser');
+var q 				= require('q');
 var methodOverride 	= require('method-override');
 var requireDir     	= require('require-dir');
 var objectFlatten  	= require('./app/utils/objectFlatten');
@@ -33,6 +34,9 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 
 // AWS SDK =================================================
 app.set('awsTools', AWS);
+
+// Q promises ==============================================
+app.set('Q', q);
 
 // Knex query builder ======================================
 app.set("QRB", knex);
