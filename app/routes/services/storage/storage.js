@@ -1,35 +1,25 @@
 // app/routes/services/storage/storageCtrl.js
-var storageCtrl = require('../../../controllers/StorageCtrl.js');
+var storage = require('../../../controllers/services/storage/storageCtrl.js');
 
 module.exports = function (app) {
-    /**GET**/
-    /*//All Storage Containers
-    app.get('/storage/containers/', getstorageCtrl.Containers);
-    app.get('/storage/containers/:container_id', getstorageCtrl.Containers);
-    app.get('/storage/containers/:container_id/objects', getstorageCtrl.ContainersById);
-    //All Storage Objects
-    app.get('/storage/objects/', getstorageCtrl.Objects);
-    app.get('/storage/objects/:object_id', getstorageCtrl.Objects);
-    */
+    app.get('/storages', storage.getAllStorages)
+    app.get('/storages/:cloud_vendor', storage.getStorages);
+    app.get('/storages/:cloud_vendor/:storage_id([0-9]+)', storage.getStorage);
 
-    app.get('/storages', storageCtrl.getAllStorages)
-    app.get('/storages/:cloud_provider', storageCtrl.getStorages);
-    app.get('/storages/:cloud_provider/:storage_id([0-9]+)', storageCtrl.getStorage);
+    app.get('/storages/:cloud_vendor/:storage_id([0-9]+)/containers', storage.getContainers);
+    app.get('/storages/:cloud_vendor/:storage_id([0-9]+)/containers/:container_id([0-9]+)', storage.getContainer);
 
-    app.get('/storages/:cloud_provider/:storage_id([0-9]+)/containers', storageCtrl.getContainers);
-    app.get('/storages/:cloud_provider/:storage_id([0-9]+)/containers/:container_id([0-9]+)', storageCtrl.getContainer);
+    app.get('/storages/:cloud_vendor/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects', storage.getObjects);
+    app.get('/storages/:cloud_vendor/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects/:object_id([0-9]+)', storage.getObject);
 
-    app.get('/storages/:cloud_provider/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects', storageCtrl.getObjects);
-    app.get('/storages/:cloud_provider/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects/:object_id([0-9]+)', storageCtrl.getObject);
+    app.put('/storages/:cloud_vendor/:storage_id([0-9]+)', storage.putStorage);
+    app.put('/storages/:cloud_vendor/:storage_id([0-9]+)/containers/:container_id([0-9]+)', storage.putContainer);
+    app.put('/storages/:cloud_vendor/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects/:object_id([0-9]+)', storage.putObject);
 
-    app.put('/storages/:cloud_provider/:storage_id([0-9]+)', storageCtrl.putStorage);
-    app.put('/storages/:cloud_provider/:storage_id([0-9]+)/containers/:container_id([0-9]+)', storageCtrl.putContainer);
-    app.put('/storages/:cloud_provider/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects/:object_id([0-9]+)', storageCtrl.putObject);
+    app.post('/storages/:cloud_vendor', storage.postStorage);
+    app.post('/storages/:cloud_vendor/:storage_id([0-9]+)/containers', storage.postContainer);
+    app.post('/storages/:cloud_vendor/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects', storage.postObject);
 
-    app.post('/storages/:cloud_provider', storageCtrl.postStorage);
-    app.post('/storages/:cloud_provider/:storage_id([0-9]+)/containers', storageCtrl.postContainer);
-    app.post('/storages/:cloud_provider/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects', storageCtrl.postObject);
-
-    app.delete('/storages/:cloud_provider/:storage_id([0-9]+)/containers/:container_id([0-9]+)', storageCtrl.deleteContainer);
-    app.delete('/storages/:cloud_provider/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects/:object_id([0-9]+)', storageCtrl.deleteObject);
+    app.delete('/storages/:cloud_vendor/:storage_id([0-9]+)/containers/:container_id([0-9]+)', storage.deleteContainer);
+    app.delete('/storages/:cloud_vendor/:storage_id([0-9]+)/containers/:container_id([0-9]+)/objects/:object_id([0-9]+)', storage.deleteObject);
 };

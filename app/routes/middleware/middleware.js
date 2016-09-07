@@ -1,18 +1,18 @@
 var arrayUtils = require('../../utils/inArray');
 
 module.exports = function (app) {
-    app.param('cloud_provider', function (req, res, next, provider) {
-        if (false === arrayUtils.inArray(provider, ['aws', 'azr'])) {
-            return res.status(400).json('Cloud provider not handled');
+    app.param('cloud_vendor', function (req, res, next, vendor) {
+        if (false === arrayUtils.inArray(vendor, ['aws', 'azr'])) {
+            return res.status(400).json('Cloud vendor not handled');
         }
-        req.cloud_provider = provider;
+        req.cloud_vendor = vendor;
         next();
     });
     app.param('storage_id', function (req, res, next, storage_id) {
         var QRB   = req.app.get('QRB');
 
         QRB('storages').where({
-            cloud_vendor: req.cloud_provider,
+            cloud_vendor: req.cloud_vendor,
             id: storage_id
         })
         .select()
@@ -33,7 +33,7 @@ module.exports = function (app) {
         var QRB   = req.app.get('QRB');
 
         QRB('storage_containers').where({
-            cloud_vendor: req.cloud_provider,
+            cloud_vendor: req.cloud_vendor,
             storage_id: req.storage.id,
             id: container_id
         })
@@ -55,7 +55,7 @@ module.exports = function (app) {
         var QRB   = req.app.get('QRB');
 
         QRB('storage_objects').where({
-            cloud_vendor: req.cloud_provider,
+            cloud_vendor: req.cloud_vendor,
             container_id: req.container.id,
             id: object_id
         })
