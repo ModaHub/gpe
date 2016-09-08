@@ -65,11 +65,3 @@ module.exports.pushAWSContainers = function(req, res) {
 
 
 // ======================= DELETE =======================
-
-
-
-// bucket_logging_conf       = Q.ninvoke(S3, 'getBucketLogging', param);
-// bucket_policy             = Q.ninvoke(S3, 'getBucketPolicy', param);
-// bucket_acl                = Q.ninvoke(S3, 'getBucketAcl', param); A voir avec Nabil
-// bucket_life_cycle_conf    = Q.ninvoke(S3, 'getBucketLifecycleConfiguration', param);
-// bucket_nottification_conf = Q.ninvoke(S3, 'getBucketNotificationConfiguration', param);

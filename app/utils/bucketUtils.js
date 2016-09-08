@@ -72,25 +72,3 @@ module.exports = {
         return datas;
     }
 }
-        // var keys = [
-        //     'name',
-        //     'description',
-        //     'creation_date',
-        //     'acl',
-        //     'storage_class',
-        //     'region',
-        //     'size',
-        //     'cache_control',
-        //     'cache_disposition',
-        //     'cache_encoding',
-        //     'expect',
-        //     'request_payment',
-        //     'versionning',
-        //     'lifecycle_configuration',
-        //     'policy_configuration',
-        //     'notification_configuration',
-        //     'logging_configuration',
-        //     'xregion_replication',
-        //     'tags',
-        //     'storage_id'
-        // ];
