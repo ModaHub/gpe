@@ -3,10 +3,10 @@ var storage     = require('./storageCtrl.js');
 var bucketUtils = require('../../../utils/bucketUtils.js');
 
 // ======================= GET =======================
-module.exports.syncAWSContainers = function(req, res) {
-    var QRB       = req.app.get('QRB');
-    var Q         = req.app.get('Q');
-    var awsTools  = req.app.get('awsTools');
+module.exports.retrieveAWSContainers = function(req, res) {
+    var QRB      = req.app.get('QRB');
+    var Q        = req.app.get('Q');
+    var awsTools = req.app.get('awsTools');
 
     QRB('accounts')
     .where({
@@ -27,52 +27,35 @@ module.exports.syncAWSContainers = function(req, res) {
 
         bucket_list = Q.ninvoke(S3, 'listBuckets', '');
 
-        bucket_list.then(function (result) {
-            for (var bucket of result.Buckets) {
-                param = {
-                    'Bucket': bucket.Name
-                };
-                bucket_location           = Q.ninvoke(S3, 'getBucketLocation', param);
-                bucket_versionning        = Q.ninvoke(S3, 'getBucketVersioning', param);
-                bucket_request_payment    = Q.ninvoke(S3, 'getBucketRequestPayment', param);
-                // bucket_logging_conf       = Q.ninvoke(S3, 'getBucketLogging', param);
-                // bucket_policy             = Q.ninvoke(S3, 'getBucketPolicy', param);
-                // bucket_acl                = Q.ninvoke(S3, 'getBucketAcl', param); A voir avec Nabil
-                // bucket_life_cycle_conf    = Q.ninvoke(S3, 'getBucketLifecycleConfiguration', param);
-                // bucket_nottification_conf = Q.ninvoke(S3, 'getBucketNotificationConfiguration', param);
+        bucket_list
+        .then(function (result) {
+            var params   = bucketUtils.getParams(result.Buckets);
+            var promises = bucketUtils.getQAllPromises(Q, S3, params);
 
-                BucketPromised = Q.all([
-                    bucket_location,
-                    bucket_versionning,
-                    bucket_request_payment
-                ]);
-
-                BucketPromised
-                .spread(function (location, versionning, request_payment) {
-                    var Bucket = {
-                        name:            bucket.Name,
-                        creation_date:   bucket.CreationDate,
-                        description:     '',
-                        request_payment: request_payment,
-                        versionning:     versionning
-                        // storage_class:   'STANDARD_IA',
-                        // region:          '',
-                        // size:            '0',
-                        // expect:          '1',
-                        // storage_id:      req.storage.id
-                    };
-                    res.status(200).json(Bucket);
-                }).catch(function (error) {
-                    res.status(500).json(error)
+            Q.all(promises)
+            .then(function (Buckets) {
+                QRB.returning('*')
+                .insert(bucketUtils.retrieveDatas(req, Buckets))
+                .into('aws_storage_containers')
+                .then(function (container) {
+                    return res.status(201).json(container);
                 })
-            }
-
+                .catch(function (error) {
+                    return res.status(400).json({
+                        msg:   "Error when writing datas",
+                        error: error
+                   });
+                })
+            })
         })
-
-    })
-    .catch(function(error) {
-        res.status(400).json(error);
+        .catch(function (error) {
+            res.result(500).json("error");
+        })
     });
+}
+
+module.exports.pushAWSContainers = function(req, res) {
+
 }
 
 // ======================= POST =======================
@@ -82,3 +65,11 @@ module.exports.syncAWSContainers = function(req, res) {
 
 
 // ======================= DELETE =======================
+
+
+
+// bucket_logging_conf       = Q.ninvoke(S3, 'getBucketLogging', param);
+// bucket_policy             = Q.ninvoke(S3, 'getBucketPolicy', param);
+// bucket_acl                = Q.ninvoke(S3, 'getBucketAcl', param); A voir avec Nabil
+// bucket_life_cycle_conf    = Q.ninvoke(S3, 'getBucketLifecycleConfiguration', param);
+// bucket_nottification_conf = Q.ninvoke(S3, 'getBucketNotificationConfiguration', param);

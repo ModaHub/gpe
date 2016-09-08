@@ -4,7 +4,7 @@ module.exports = {
     db_url: "postgresql://root:etna42@37.59.60.163:5432/development",
     db : {
     	client: 'pg',
-    	debug: true,
+    	debug: false,
 	    connection: {
 		    port: "5432",
 	    	host: "127.0.0.1",
